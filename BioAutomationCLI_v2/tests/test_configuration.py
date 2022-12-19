@@ -1,4 +1,4 @@
-import tempfile, os, shutil
+import tempfile, os, shutil, json
 from src.Configuration import Configuration
 from src.helpers.FileHandler import FileHandler
 from src.erros.WorkspaceAlreadyExistsException import WorkspaceAlreadyExistsException
@@ -21,9 +21,9 @@ def test_if_settings_was_saved():
 @pytest.mark.parametrize(
     "name",
     [
-        ("tdp_43"),
-        ("tdp_42"),
-        ("sod1")
+        ("TDP43"),
+        ("TDP42"),
+        ("SOD1")
     ]
 )
 def test_if_create_workspace_is_working(name):
@@ -42,9 +42,9 @@ def test_if_create_workspace_is_working(name):
 @pytest.mark.parametrize(
     "name",
     [
-        ("tdp_43"),
-        ("tdp_42"),
-        ("sod1")
+        ("TDP43"),
+        ("TDP42"),
+        ("SOD1")
     ]
 )
 def test_if_error_while_creating_workspace_is_working(name):
@@ -54,12 +54,40 @@ def test_if_error_while_creating_workspace_is_working(name):
 @pytest.mark.parametrize(
     "name",
     [
-        ("tdp_43")
+        ("TDP43"),
+        ("TDP42"),
+        ("SOD1")
+    ]
+)
+def test_get_workspace(name):
+    workpsace_settings = config.get_workspace(name)
+    assert workpsace_settings != False
+    assert workpsace_settings['name'] == name
+
+def test_get_not_existing_workspace():
+    workpsace_settings = config.get_workspace("non_Existing_workspace")
+    assert workpsace_settings == False
+
+def test_list_all_workspaces():
+    all_workspaces = config.list_all_workspace()
+    all_workspaces_settings = json.loads(all_workspaces)
+    assert "TDP43" in all_workspaces_settings['workspaces']
+    assert "TDP42" in all_workspaces_settings['workspaces']
+    assert "SOD1" in all_workspaces_settings['workspaces']
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        ("TDP43"),
+        ("TDP42"),
+        ("SOD1")
     ]
 )
 def test_delete_workspace(name):
     config.delete_workspace(name)
     assert name not in config.configuration['workspaces']
+    settings_saved = FileHandler.read_file_contents(path_to_settings)
+    assert name not in settings_saved['workspaces']
     assert not FileHandler.folder_exists_in(path_to_workspaces, name)
     path_to_workspace = os.path.join(path_to_workspaces, name)
     path_to_settings_workspace = os.path.join(path_to_workspace, "settings.json")

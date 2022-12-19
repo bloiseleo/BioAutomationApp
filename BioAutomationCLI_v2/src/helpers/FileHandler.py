@@ -1,4 +1,4 @@
-import os, json
+import os, json, shutil
 
 class FileHandler:
 
@@ -23,3 +23,6 @@ class FileHandler:
             content = file.read()
             data = json.loads(content)
             return data
+    @staticmethod
+    def delete_dir(path: str) -> None:
+        shutil.rmtree(path)
