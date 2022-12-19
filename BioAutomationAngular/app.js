@@ -1,6 +1,8 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const url = require("url");
 const path = require("path");
+const ExtraResources = require("./config/ExrtaResources.js")
+const extraResources = new ExtraResources()
 
 let mainWindow
 
@@ -9,17 +11,21 @@ function createWindow () {
     width: 1024,
     height: 768,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      preload: path.join(__dirname, "preload.js")
     }
   })
 
-   mainWindow.loadURL(
+  ipcMain.handle("get:extraResourcesPath", async () => extraResources.pathToCLIApp)
+
+  mainWindow.loadURL(
       url.format({
         pathname: path.join(__dirname, `/dist/bio-automation-angular/index.html`),
         protocol: "file:",
         slashes: true
       })
   );
+
   mainWindow.on('closed', function () {
     mainWindow = null
   })
