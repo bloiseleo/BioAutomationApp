@@ -1,6 +1,7 @@
 import click
+from src.Configuration import Configuration
 
-@cli.group()
+@click.group()
 def cli():
     pass
 
