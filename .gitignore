@@ -7,3 +7,4 @@ snp_result.xml
 build
 dist
 venv
+__pycache__
