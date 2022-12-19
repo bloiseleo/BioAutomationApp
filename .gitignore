@@ -1,0 +1,9 @@
+.angular
+.vscode
+dist
+node_modules
+out
+snp_result.xml
+build
+dist
+venv
