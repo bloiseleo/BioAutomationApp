@@ -50,3 +50,17 @@ def test_if_create_workspace_is_working(name):
 def test_if_error_while_creating_workspace_is_working(name):
     with pytest.raises(WorkspaceAlreadyExistsException) as e_info:
         config.create_workspace(name)
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        ("tdp_43")
+    ]
+)
+def test_delete_workspace(name):
+    config.delete_workspace(name)
+    assert name not in config.configuration['workspaces']
+    assert not FileHandler.folder_exists_in(path_to_workspaces, name)
+    path_to_workspace = os.path.join(path_to_workspaces, name)
+    path_to_settings_workspace = os.path.join(path_to_workspace, "settings.json")
+    assert not FileHandler.file_exists(path_to_settings_workspace)
