@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "ng build --base-href ./ & electron-forge make"
   },
   "private": true,
   "dependencies": {

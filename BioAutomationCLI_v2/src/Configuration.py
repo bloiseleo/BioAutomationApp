@@ -2,6 +2,7 @@ import os, tempfile, json
 from src.helpers.FileHandler import FileHandler
 from src.erros.WorkspaceAlreadyExistsException import WorkspaceAlreadyExistsException
 from src.helpers.StringDoctor import StringDoctor
+from src.services.DbsnpToExcel import DbsnpToExcel
 
 class Configuration:
     
@@ -44,7 +45,7 @@ class Configuration:
             "path_to_base_xlsx": os.path.join(path_to_workspace, "base_dataframe.xlsx")
         }
 
-    def create_workspace(self, name):
+    def create_workspace(self, name, file, refseq, remove_truncating, ):
         name = StringDoctor.treat_workspace_name(name)
         if(self.check_if_workspace_exist(name)):
             raise WorkspaceAlreadyExistsException(f"{name} - Já existe esse workspace")
@@ -54,6 +55,11 @@ class Configuration:
         FileHandler.save_file_in(path_to_settings, workspace_settings)
         self.configuration['workspaces'].append(name)
         self.save()
+
+        reader = DbsnpToExcel(refseq, file)
+        df = reader.read(remove_truncating)
+        df.to_excel(workspace_settings['path_to_base_xlsx'])
+        
 
     def delete_workspace(self, name):
         if(not self.check_if_workspace_exist(name)):
