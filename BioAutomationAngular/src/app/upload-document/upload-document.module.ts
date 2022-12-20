@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { UploadDocumentRoutingModule } from './upload-document-routing.module';
 import { UploadFormComponent } from './upload-form/upload-form.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { UploadFormComponent } from './upload-form/upload-form.component';
   ],
   imports: [
     CommonModule,
-    UploadDocumentRoutingModule
+    UploadDocumentRoutingModule,
+    FormsModule
   ]
 })
 export class UploadDocumentModule { }

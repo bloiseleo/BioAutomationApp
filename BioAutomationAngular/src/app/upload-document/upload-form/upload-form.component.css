@@ -25,6 +25,20 @@
   margin: 3rem 0;
 }
 
+.upload__form__form--error {
+  background: var(--light_red);
+  border-radius: 13px;
+  border: 1px solid var(--red);
+  color: var(--red);
+  font-size: 1.3rem;
+  opacity: 0;
+  padding: 1rem;
+}
+
+.upload__form__form--error.show {
+  opacity: 1;
+}
+
 .upload__form__form__inputGroup {
   align-items: center;
   display: flex;
@@ -52,6 +66,7 @@
   border: none;
   border-radius: 13px;
   color: var(--white);
+  cursor: pointer;
   outline: none;
   font-size: 2rem;
   height: 3.5rem;

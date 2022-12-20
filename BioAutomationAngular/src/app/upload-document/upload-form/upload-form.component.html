@@ -6,18 +6,19 @@
       </svg>
       <p> Upload do Documento </p>
     </h1>
-    <form class="upload__form__form">
+    <form class="upload__form__form" (ngSubmit)="handleSubmit($event)" >
+      <p class="upload__form__form--error"></p>
       <div class="upload__form__form__inputGroup">
         <label for="name">Nome:</label>
-        <input type="text" name="name" id="name">
+        <input type="text" name="name" id="name" [(ngModel)]="workspaceName">
       </div>
       <div class="upload__form__form__inputGroup">
         <label for="refseq">RefSeq:</label>
-        <input type="text" name="refseq" id="refseq">
+        <input type="text" name="refseq" id="refseq" [(ngModel)]="refseqCode">
       </div>
       <div class="upload__form__form__inputGroup"><label for="file">Arquivo:</label>
-        <button class="upload__form__form__inputGroup--file">Escolha o arquivo...</button>
-        <input type="file" name="file" id="file">
+        <button type="button" (click)="handleClickUpload()" class="upload__form__form__inputGroup--file">Escolha o arquivo...</button>
+        <input type="file" (change)="handleUploadFile($event)" accept=".xml" name="file" id="file">
       </div>
       <input type="submit" value="Upload">
     </form>

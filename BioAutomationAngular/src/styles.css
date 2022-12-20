@@ -61,6 +61,8 @@ html, body {
   --green: #10E271;
   --light_green: #10e272b0;
   --light_orange: #EF7960;
+  --red: #fa2a00;
+  --light_red: #fdbcaf;
 }
 
 *, *::before, *::after {
