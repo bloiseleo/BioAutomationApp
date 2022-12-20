@@ -6,10 +6,6 @@
   height: 100%;
 }
 
-.container {
-  padding: .5rem;
-}
-
 .sidebar__menu {
   height: 100%;
 }
@@ -36,12 +32,12 @@
 .sidebar__menu__listitem__link svg {
   color: var(--light_blue);
   height: 50px;
-  transition: color .3s ease-in-out;
+  transition: color .1s ease-in-out;
   width: 50px;
 }
 
 .sidebar__menu__listitem__link:hover svg {
-  color: rgba(255, 255, 255, 0.7)
+  color: var(--hover_blue);
 }
 
 .sidebar__menu__listitem__link.active svg {

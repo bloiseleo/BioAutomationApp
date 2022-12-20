@@ -55,13 +55,19 @@ html, body {
   font-size: 16px;
   --dark_blue: #1E4C82;
   --light_blue: #7DB5F6;
+  --hover_blue: #7db6f694;
   --white: #FFFFFF;
   --black: #000000;
   --green: #10E271;
+  --light_green: #10e272b0;
   --light_orange: #EF7960;
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
   font-family: 'Lexend Deca', sans-serif;
+}
+
+.container {
+  padding: .5rem;
 }
