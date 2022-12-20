@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ElectronWindow } from '../interfaces/ElectronWindow'
 
+
 function _window() {
   return window as unknown;
 }
@@ -27,6 +28,16 @@ export class ElectronAPIService {
   async getExtraResourcesPath(): Promise<string | undefined> {
     const extraResourcesPath = await this._window?.electronAPI.getExtraResourcesPath()
     return extraResourcesPath
+  }
+
+  async uploadDocument(workspaceName: string, file: string, refseq: string): Promise<boolean> {
+    try {
+      const result = await this._window?.electronAPI.uploadDocument(workspaceName, file, refseq)
+      return Boolean(result);
+    } catch(error: unknown) {
+      console.error(error)
+      return false;
+    }
   }
 
   isElectron(): boolean {
