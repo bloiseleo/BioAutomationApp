@@ -1,0 +1,49 @@
+.sidebar {
+  background-color: var(--dark_blue);
+}
+
+.sidebar, .container {
+  height: 100%;
+}
+
+.container {
+  padding: .5rem;
+}
+
+.sidebar__menu {
+  height: 100%;
+}
+
+.sidebar__menu__list {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}
+
+.sidebar__menu__list--body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 90%;
+}
+
+.sidebar__menu__list--body .sidebar__menu__listitem {
+  margin-top: 3rem;
+}
+
+.sidebar__menu__listitem__link svg {
+  color: var(--light_blue);
+  height: 50px;
+  transition: color .3s ease-in-out;
+  width: 50px;
+}
+
+.sidebar__menu__listitem__link:hover svg {
+  color: rgba(255, 255, 255, 0.7)
+}
+
+.sidebar__menu__listitem__link.active svg {
+  color: var(--white);
+}
