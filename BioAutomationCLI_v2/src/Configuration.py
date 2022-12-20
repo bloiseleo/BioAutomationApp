@@ -45,7 +45,7 @@ class Configuration:
             "path_to_base_xlsx": os.path.join(path_to_workspace, "base_dataframe.xlsx")
         }
 
-    def create_workspace(self, name, file, refseq, remove_truncating, ):
+    def create_workspace(self, name, file, refseq, remove_truncating):
         name = StringDoctor.treat_workspace_name(name)
         if(self.check_if_workspace_exist(name)):
             raise WorkspaceAlreadyExistsException(f"{name} - Já existe esse workspace")
