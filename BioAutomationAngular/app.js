@@ -1,10 +1,23 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
 const url = require("url");
 const path = require("path");
-const ExtraResources = require("./config/ExrtaResources.js")
+const {exec} = require("child_process")
+const ExtraResources = require("./config/ExrtaResources.js");
+const { stderr } = require('process');
 const extraResources = new ExtraResources()
 
 let mainWindow
+
+function execCommand(command) {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if(error) {
+        return reject(error)
+      }
+      return resolve({stdout, stderr})
+    })
+  })
+}
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -17,6 +30,19 @@ function createWindow () {
   })
 
   ipcMain.handle("get:extraResourcesPath", async () => extraResources.pathToCLIApp)
+  ipcMain.handle("make:uploadDocument", async (_, data) => {
+    const {pathToCLIApp} = extraResources;
+    const command = `${pathToCLIApp} create-workspace --name="${data['workspaceName']}" --refseq="${data['refseq']}" --file="${data['file']}"`
+    return execCommand(command)
+    .then(data => {
+      console.log(data)
+      if(data['stderr'] != "") {
+        console.error(stderr)
+        return false;
+      }
+      return true;
+    })
+  })
 
   mainWindow.loadURL(
       url.format({
