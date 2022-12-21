@@ -35,7 +35,6 @@ function createWindow () {
     const command = `${pathToCLIApp} create-workspace --name="${data['workspaceName']}" --refseq="${data['refseq']}" --file="${data['file']}"`
     return execCommand(command)
     .then(data => {
-      console.log(data)
       if(data['stderr'] != "") {
         console.error(stderr)
         return false;

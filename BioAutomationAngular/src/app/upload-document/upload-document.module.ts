@@ -14,6 +14,6 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     UploadDocumentRoutingModule,
     FormsModule
-  ]
+  ],
 })
 export class UploadDocumentModule { }
