@@ -37,7 +37,7 @@ class Configuration:
     def save(self):
         FileHandler.save_file_in(self.path_to_configuration, self.configuration)
 
-    def create_settings_to_workspace(self, name: str) -> dict:
+    def create_settings_to_workspace(self, name: str, protein_sequence: str) -> dict:
         path_to_workspace = self.create_path_to_workspace(name)
         return {
             "name": name,
@@ -48,7 +48,8 @@ class Configuration:
                     "done": False,
                     "path_to_file": os.path.join(path_to_workspace, "predict_snp_entry.json")
                 }
-            }
+            },
+            "protein_sequence": protein_sequence
         }
 
     def service_done(self, workspace_name: str,kind: str, service_name: str) -> None:
@@ -61,11 +62,11 @@ class Configuration:
     def save_workspace(self, path_to_settings: str, workspace_settings: dict) -> None:
         FileHandler.save_file_in(path_to_settings, workspace_settings)
 
-    def create_workspace(self, name, file, refseq, remove_truncating):
+    def create_workspace(self, name, file, refseq, remove_truncating, protein_sequence):
         name = StringDoctor.treat_workspace_name(name)
         if(self.check_if_workspace_exist(name)):
             raise WorkspaceAlreadyExistsException(f"{name} - Já existe esse workspace")
-        workspace_settings = self.create_settings_to_workspace(name)
+        workspace_settings = self.create_settings_to_workspace(name, protein_sequence)
         FileHandler.create_folder(workspace_settings['path'])
         path_to_settings = os.path.join(workspace_settings['path'], 'settings.json')
         self.save_workspace(path_to_settings, workspace_settings)

@@ -18,6 +18,6 @@ class PredictSNPEntry:
         dataframe = pd.read_excel(self._dataframe_path)
         data = dict()
         data['protein_sequence'] = self._protein_sequence
-        data['mutations'] = self.extract_mutations(dataframe)
+        data['mutations'] = self.extract_mutations()
         with open(path_to_save_file, "w") as file:
             file.write(json.dumps(data))

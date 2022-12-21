@@ -27,15 +27,15 @@ def test_if_settings_was_saved():
     assert FileHandler.file_exists(path_to_settings)
 
 @pytest.mark.parametrize(
-    "name, file, refseq, remove_truncating",
+    "name, file, refseq, remove_truncating, protein_sequence",
     [
-        ("TDP43", "C:\\Users\\leona\\workspace\\BioAutomationDesktopApp\\BioAutomationCLI_v2\\tests\\testdata\\snp_result.xml", "NP_031401.1", True),
-        ("TDP42", "C:\\Users\\leona\\workspace\\BioAutomationDesktopApp\\BioAutomationCLI_v2\\tests\\testdata\\snp_result.xml", "NP_031401.1", True),
-        ("SOD1", "C:\\Users\\leona\\workspace\\BioAutomationDesktopApp\\BioAutomationCLI_v2\\tests\\testdata\\snp_result.xml", "NP_031401.1", True)
+        ("TDP43", "C:\\Users\\leona\\workspace\\BioAutomationDesktopApp\\BioAutomationCLI_v2\\tests\\testdata\\snp_result.xml", "NP_031401.1", True, ">sp|Q13148|TADBP_HUMAN TAR DNA-binding protein 43 OS=Homo sapiens OX=9606 GN=TARDBP PE=1 SV=1\n\rMSEYIRVTEDENDEPIEIPSEDDGTVLLSTVTAQFPGACGLRYRNPVSQCMRGVRLVEGILHAPDAGWGNLVYVVNYPKDNKRKMDETDASSAVKVKRAVQKTSDLIVLGLPWKTTEQDLKEYFSTFGEVLMVQVKKDLKTGHSKGFGFVRFTEYETQVKVMSQRHMIDGRWCDCKLPNSKQSQDEPLRSRKVFVGRCTEDMTEDELREFFSQYGDVMDVFIPKPFRAFAFVTFADDQIAQSLCGEDLIIKGISVHISNAEPKHNSNRQLERSGRFGGNPGGFGNQGGFGNSRGGGAGLGNNQGSNMGGGMNFGAFSINPAMMAAAQAALQSSWGMMGMLASQQNQSGPSGNNQNQGNMQREPNQAFGSGNNSYSGSNSGAAIGWGSASNAGSGSGFNGGFGSSMDSKSSGWGM"),
+        ("TDP42", "C:\\Users\\leona\\workspace\\BioAutomationDesktopApp\\BioAutomationCLI_v2\\tests\\testdata\\snp_result.xml", "NP_031401.1", True, ">sp|Q13148|TADBP_HUMAN TAR DNA-binding protein 43 OS=Homo sapiens OX=9606 GN=TARDBP PE=1 SV=1\n\rMSEYIRVTEDENDEPIEIPSEDDGTVLLSTVTAQFPGACGLRYRNPVSQCMRGVRLVEGILHAPDAGWGNLVYVVNYPKDNKRKMDETDASSAVKVKRAVQKTSDLIVLGLPWKTTEQDLKEYFSTFGEVLMVQVKKDLKTGHSKGFGFVRFTEYETQVKVMSQRHMIDGRWCDCKLPNSKQSQDEPLRSRKVFVGRCTEDMTEDELREFFSQYGDVMDVFIPKPFRAFAFVTFADDQIAQSLCGEDLIIKGISVHISNAEPKHNSNRQLERSGRFGGNPGGFGNQGGFGNSRGGGAGLGNNQGSNMGGGMNFGAFSINPAMMAAAQAALQSSWGMMGMLASQQNQSGPSGNNQNQGNMQREPNQAFGSGNNSYSGSNSGAAIGWGSASNAGSGSGFNGGFGSSMDSKSSGWGM"),
+        ("SOD1", "C:\\Users\\leona\\workspace\\BioAutomationDesktopApp\\BioAutomationCLI_v2\\tests\\testdata\\snp_result.xml", "NP_031401.1", True, ">sp|Q13148|TADBP_HUMAN TAR DNA-binding protein 43 OS=Homo sapiens OX=9606 GN=TARDBP PE=1 SV=1\n\rMSEYIRVTEDENDEPIEIPSEDDGTVLLSTVTAQFPGACGLRYRNPVSQCMRGVRLVEGILHAPDAGWGNLVYVVNYPKDNKRKMDETDASSAVKVKRAVQKTSDLIVLGLPWKTTEQDLKEYFSTFGEVLMVQVKKDLKTGHSKGFGFVRFTEYETQVKVMSQRHMIDGRWCDCKLPNSKQSQDEPLRSRKVFVGRCTEDMTEDELREFFSQYGDVMDVFIPKPFRAFAFVTFADDQIAQSLCGEDLIIKGISVHISNAEPKHNSNRQLERSGRFGGNPGGFGNQGGFGNSRGGGAGLGNNQGSNMGGGMNFGAFSINPAMMAAAQAALQSSWGMMGMLASQQNQSGPSGNNQNQGNMQREPNQAFGSGNNSYSGSNSGAAIGWGSASNAGSGSGFNGGFGSSMDSKSSGWGM")
     ]
 )
-def test_if_create_workspace_is_working(name, file, refseq, remove_truncating):
-    config.create_workspace(name, file, refseq, remove_truncating)
+def test_if_create_workspace_is_working(name, file, refseq, remove_truncating, protein_sequence):
+    config.create_workspace(name, file, refseq, remove_truncating, protein_sequence)
     assert name in config.configuration['workspaces']
     settings_saved_on_disk = FileHandler.read_file_contents(path_to_settings)
     assert name in settings_saved_on_disk['workspaces']
@@ -46,6 +46,7 @@ def test_if_create_workspace_is_working(name, file, refseq, remove_truncating):
     assert workspace_settings['name'] == name
     assert workspace_settings['path'] == path_to_workspace
     assert workspace_settings['path_to_base_xlsx'] == os.path.join(path_to_workspace, "base_dataframe.xlsx")
+    assert workspace_settings['protein_sequence'] == protein_sequence
     assert FileHandler.file_exists(workspace_settings['path_to_base_xlsx'])
     dataframe = pd.read_excel(workspace_settings['path_to_base_xlsx'])
     dict_dataframe = dataframe.to_dict() #{column -> {index -> value}}
@@ -68,7 +69,7 @@ def test_if_create_workspace_is_working(name, file, refseq, remove_truncating):
 )
 def test_if_error_while_creating_workspace_is_working(name):
     with pytest.raises(WorkspaceAlreadyExistsException) as e_info:
-        config.create_workspace(name, "", "", True)
+        config.create_workspace(name, "", "", True, "")
 
 @pytest.mark.parametrize(
     "name",
