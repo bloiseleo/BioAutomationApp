@@ -42,8 +42,24 @@ class Configuration:
         return {
             "name": name,
             "path": path_to_workspace,
-            "path_to_base_xlsx": os.path.join(path_to_workspace, "base_dataframe.xlsx")
+            "path_to_base_xlsx": os.path.join(path_to_workspace, "base_dataframe.xlsx"),
+            "entry": {
+                "predictSNP": {
+                    "done": False,
+                    "path_to_file": os.path.join(path_to_workspace, "predict_snp_entry.json")
+                }
+            }
         }
+
+    def service_done(self, workspace_name: str,kind: str, service_name: str) -> None:
+        workspace_settings = self.get_workspace(workspace_name)
+        if workspace_settings == False:
+            return
+        workspace_settings[kind][service_name]['done'] = True
+        self.save_workspace(os.path.join(workspace_settings['path'], "settings.json"), workspace_settings)
+
+    def save_workspace(self, path_to_settings: str, workspace_settings: dict) -> None:
+        FileHandler.save_file_in(path_to_settings, workspace_settings)
 
     def create_workspace(self, name, file, refseq, remove_truncating):
         name = StringDoctor.treat_workspace_name(name)
@@ -52,14 +68,14 @@ class Configuration:
         workspace_settings = self.create_settings_to_workspace(name)
         FileHandler.create_folder(workspace_settings['path'])
         path_to_settings = os.path.join(workspace_settings['path'], 'settings.json')
-        FileHandler.save_file_in(path_to_settings, workspace_settings)
+        self.save_workspace(path_to_settings, workspace_settings)
         self.configuration['workspaces'].append(name)
         self.save()
 
         reader = DbsnpToExcel(refseq, file)
         df = reader.read(remove_truncating)
         df.to_excel(workspace_settings['path_to_base_xlsx'])
-        
+
 
     def delete_workspace(self, name):
         if(not self.check_if_workspace_exist(name)):

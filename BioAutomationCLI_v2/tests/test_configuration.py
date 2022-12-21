@@ -82,6 +82,19 @@ def test_get_workspace(name):
     workpsace_settings = config.get_workspace(name)
     assert workpsace_settings != False
     assert workpsace_settings['name'] == name
+@pytest.mark.parametrize(
+    "name, kind, service_name",
+    [
+        ("TDP43", "entry", "predictSNP"),
+        ("TDP42", "entry", "predictSNP"),
+        ("SOD1", "entry", "predictSNP")
+    ]
+)
+def test_service_done(name, kind, service_name):
+    config.service_done(name, kind, service_name)
+    workpsace_settings = config.get_workspace(name)
+    assert workpsace_settings[kind][service_name]['done'] == True
+
 
 def test_get_not_existing_workspace():
     workpsace_settings = config.get_workspace("non_Existing_workspace")
