@@ -32,5 +32,11 @@ def predict_snp_entry(ctx, name):
     entry.getEntry(workspace['entry']['predictSNP']['path_to_file'])
     config.service_done(name, "entry", "predictSNP")
 
+@cli.command()
+@click.pass_context
+def list_all_workspaces(ctx):
+    config = ctx.obj['config']
+    print(config.list_all_workspace())
+
 if __name__ == '__main__':
     cli()

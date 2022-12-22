@@ -40,6 +40,20 @@ export class ElectronAPIService {
     }
   }
 
+  async listAllWorkspaces(): Promise<string | boolean> {
+    try {
+      const result = await this._window?.electronAPI.listAllWorkspaces()
+      if(typeof result !== "string") {
+        return false;
+      }
+
+      return result
+    } catch(error: unknown) {
+      console.error(error)
+      return false;
+    }
+  }
+
   isElectron(): boolean {
     return (Object.keys(window).includes("electronAPI"))
   }

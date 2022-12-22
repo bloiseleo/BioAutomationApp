@@ -42,6 +42,18 @@ function createWindow () {
       return true;
     })
   })
+  ipcMain.handle("get:allWorkspaces", async (event) => {
+    const {pathToCLIApp} = extraResources;
+    const command = `${pathToCLIApp} list-all-workspaces`
+    return execCommand(command)
+    .then(data => {
+      if(data['stderr'] != "") {
+        console.error(stderr)
+        return false;
+      }
+      return data['stdout']
+    })
+  })
 
   mainWindow.loadURL(
       url.format({

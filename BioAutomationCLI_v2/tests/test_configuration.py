@@ -104,24 +104,31 @@ def test_get_not_existing_workspace():
 def test_list_all_workspaces():
     all_workspaces = config.list_all_workspace()
     all_workspaces_settings = json.loads(all_workspaces)
-    assert "TDP43" in all_workspaces_settings['workspaces']
-    assert "TDP42" in all_workspaces_settings['workspaces']
-    assert "SOD1" in all_workspaces_settings['workspaces']
-
-@pytest.mark.parametrize(
-    "name",
-    [
-        ("TDP43"),
-        ("TDP42"),
-        ("SOD1")
+    workspace_settings_TDP43 = all_workspaces_settings[0]
+    keys = [
+        "name",
+        "path",
+        "path_to_base_xlsx",
+        "entry",
+        "protein_sequence"
     ]
-)
-def test_delete_workspace(name):
-    config.delete_workspace(name)
-    assert name not in config.configuration['workspaces']
-    settings_saved = FileHandler.read_file_contents(path_to_settings)
-    assert name not in settings_saved['workspaces']
-    assert not FileHandler.folder_exists_in(path_to_workspaces, name)
-    path_to_workspace = os.path.join(path_to_workspaces, name)
-    path_to_settings_workspace = os.path.join(path_to_workspace, "settings.json")
-    assert not FileHandler.file_exists(path_to_settings_workspace)
+    for key in keys:
+        assert key in workspace_settings_TDP43.keys()
+
+# @pytest.mark.parametrize(
+#     "name",
+#     [
+#         ("TDP43"),
+#         ("TDP42"),
+#         ("SOD1")
+#     ]
+# )
+# def test_delete_workspace(name):
+#     config.delete_workspace(name)
+#     assert name not in config.configuration['workspaces']
+#     settings_saved = FileHandler.read_file_contents(path_to_settings)
+#     assert name not in settings_saved['workspaces']
+#     assert not FileHandler.folder_exists_in(path_to_workspaces, name)
+#     path_to_workspace = os.path.join(path_to_workspaces, name)
+#     path_to_settings_workspace = os.path.join(path_to_workspace, "settings.json")
+#     assert not FileHandler.file_exists(path_to_settings_workspace)

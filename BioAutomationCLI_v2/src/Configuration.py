@@ -98,4 +98,9 @@ class Configuration:
         return settings
     
     def list_all_workspace(self) -> str:
-        return json.dumps(self.configuration)
+        wrokspaces_settings = []
+        workspaces_names = self.configuration['workspaces']
+        for workspace_name in workspaces_names:
+            path_to_settings = os.path.join(self.create_path_to_workspace(workspace_name), "settings.json")
+            wrokspaces_settings.append(FileHandler.read_file_contents(path_to_settings))
+        return json.dumps(wrokspaces_settings)
