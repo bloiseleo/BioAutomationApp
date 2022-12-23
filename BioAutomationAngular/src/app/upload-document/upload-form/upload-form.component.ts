@@ -123,7 +123,6 @@ export class UploadFormComponent {
   }
 
   handleSubmit($event: Event) {
-    console.log(this.proteinSequence?.replace(/\s/g, ""))
     const form = $event.target as HTMLElement;
     const inputSubmit = form.querySelector(`.upload__form__form input[type="submit"]`) as HTMLElement;
     this.loadingService.startLoading(inputSubmit)
