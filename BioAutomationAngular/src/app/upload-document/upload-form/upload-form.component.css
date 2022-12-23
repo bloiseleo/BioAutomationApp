@@ -8,21 +8,22 @@
 .upload__form__title {
   align-items: center;
   display: flex;
+  justify-content: center;
 }
 
 .upload__form .upload__form__title svg{
-  height: 130px;
-  width: 130px;
+  height: 50px;
+  width: 50px;
 }
 
 .upload__form .upload__form__title p {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 .upload__form__form {
   display: flex;
   flex-direction: column;
-  margin: 3rem 0;
+  min-width: 600px;
 }
 
 .upload__form__form--error {
@@ -43,21 +44,20 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 .upload__form__form__inputGroup label {
-  font-size: 2rem;
+  font-size: 1.3rem;
 }
 
 .upload__form__form__inputGroup input {
   border: 1.5px solid var(--dark_blue);
   border-radius: 13px;
   color: var(--black);
-  font-size: 1.5rem;
   outline: none;
   padding: 1rem;
-  height: 3.5rem;
+  height: 1.5rem;
   width: 60.5%;
 }
 
@@ -77,9 +77,8 @@
   color: var(--white);
   cursor: pointer;
   outline: none;
-  font-size: 2rem;
-  height: 3.5rem;
-  width: 60.5%;
+  height: 1.5rem;
+  width: 50%;
 }
 
 .upload__form__form__inputGroup input#file {
@@ -87,6 +86,7 @@
 }
 
 .upload__form__form input[type="submit"] {
+  align-self: center;
   background-color: var(--green);
   border: none;
   border-radius: 13px;
@@ -94,10 +94,39 @@
   cursor: pointer;
   font-size: 2rem;
   margin-top: 1rem;
+  min-width: 300px;
   outline: none;
   height: 3.5rem;
 }
 
 .upload__form__form input[type="submit"]:hover {
   background-color: var(--light_green);
+}
+
+
+@media screen and (min-height: 980px) {
+  .upload__form .upload__form__title svg{
+    height: 130px;
+    width: 130px;
+  }
+  .upload__form  .upload__form__title p {
+    font-size: 3rem;
+  }
+  .upload__form__form__inputGroup label {
+    font-size: 2rem;
+  }
+  .upload__form__form__inputGroup input {
+    font-size: 1.5rem;
+    height: 3.5rem;
+  }
+  .upload__form__form__inputGroup--textare {
+    font-size: 1.1rem;
+  }
+  .upload__form__form__inputGroup--file {
+    font-size: 1.3rem;
+    height: 2.5rem;
+  }
+  .upload__form__form input[type="submit"] {
+    align-self: unset;
+  }
 }
