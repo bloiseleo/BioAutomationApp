@@ -153,6 +153,7 @@ export class UploadFormComponent {
         this.loadingService.stopLoading()
         if(!success) {
           this.setError("Houve um erro ao executar o Upload do Arquivo.", "#name")
+          return;
         }
         this.alertService.show("Workspace Criado!", `O Workspace de nome ${this.workspaceName} foi criado.`)
         this.resetForm()

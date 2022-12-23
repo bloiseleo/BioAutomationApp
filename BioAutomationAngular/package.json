@@ -1,6 +1,6 @@
 {
-  "name": "bio-automation-angular",
-  "version": "0.0.1",
+  "name": "bio-automation",
+  "version": "1.0.0",
   "main": "app.js",
   "scripts": {
     "ng": "ng",

@@ -12,7 +12,7 @@ module.exports = {
         language: 1046, // Português - Brasileiro
         name: 'BioAutomation',
         manufacturer: "BioInfoGroup",
-        version: "0.0.1",
+        version: "1.0.0",
       }
     }
   ],

@@ -32,7 +32,7 @@ function createWindow () {
   ipcMain.handle("get:extraResourcesPath", async () => extraResources.pathToCLIApp)
   ipcMain.handle("make:uploadDocument", async (_, data) => {
     const {pathToCLIApp} = extraResources;
-    const command = `${pathToCLIApp} create-workspace --name="${data['workspaceName']}" --refseq="${data['refseq']}" --file="${data['file']}" --protein_sequence="${data['proteinSequence']}" --protein_header="${data['proteinHeader']}"`
+    const command = `"${pathToCLIApp}" --name="${data['workspaceName']}" --refseq="${data['refseq']}" --file="${data['file']}" --protein_sequence="${data['proteinSequence']}" --protein_header="${data['proteinHeader']}"`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {
@@ -44,7 +44,7 @@ function createWindow () {
   })
   ipcMain.handle("get:allWorkspaces", async (event) => {
     const {pathToCLIApp} = extraResources;
-    const command = `${pathToCLIApp} list-all-workspaces`
+    const command = `"${pathToCLIApp}" list-all-workspaces`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {
@@ -57,7 +57,7 @@ function createWindow () {
   ipcMain.handle("processEntry:predictSNP", async (_, data) => {
     const {pathToCLIApp} = extraResources;
     const {workspaceName} = data;
-    const command = `${pathToCLIApp} predict-snp-entry --name="${workspaceName}"`
+    const command = `"${pathToCLIApp}" predict-snp-entry --name="${workspaceName}"`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {
@@ -70,7 +70,7 @@ function createWindow () {
   ipcMain.handle("get:workspace", async (_, data) => {
     const {workspaceName} = data;
     const {pathToCLIApp} = extraResources;
-    const command = `${pathToCLIApp} get-workspace  --name="${workspaceName}"`
+    const command = `"${pathToCLIApp}" get-workspace  --name="${workspaceName}"`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {
