@@ -38,6 +38,11 @@
 
 .process__main--icon {
   align-self: center;
+  cursor: pointer;
+}
+
+.process__main--icon.blocked {
+  cursor: not-allowed;
 }
 
 .process__main--icon svg {

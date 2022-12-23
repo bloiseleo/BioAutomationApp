@@ -4,6 +4,7 @@ import {Workspace, Workspaces} from 'src/app/interfaces/Workspace';
 import { PredictSNPEntryService } from 'src/app/services/predict-snpentry.service';
 import Process from 'src/app/interfaces/Process';
 import { AlertService } from 'src/app/services/alert.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-workspace',
@@ -22,6 +23,7 @@ export class WorkspaceComponent implements OnInit {
 
   constructor(
     private alertService: AlertService,
+    private loadingService: LoadingService,
     private electronService: ElectronAPIService,
     public predictSNPEntry: PredictSNPEntryService) {
       this.entryServices.push({
@@ -63,9 +65,11 @@ export class WorkspaceComponent implements OnInit {
     serviceName: string
   } ) {
     if(this.workspaceNameSelected === undefined) {
+      this.setErrorMessage("Um workspace deve ser escolhido antes de executar as funções existentes.")
       throw new Error("Workspace must be selected to execute functions")
     }
     if(this.workspaceSelected === undefined) {
+      this.setErrorMessage("Um workspace deve ser escolhido antes de executar as funções existentes.")
       throw new Error("Workspace must be selected to execute functions")
     }
     const workspaceName = this.workspaceNameSelected as string;
@@ -78,14 +82,21 @@ export class WorkspaceComponent implements OnInit {
     }
     const serviceToExecute = optionsWanted[key];
     const timestart = Date.now();
+    const icons = document.querySelectorAll(".process__main--icon") as NodeListOf<HTMLElement>;
+    this.loadingService.startLoading(icons)
     serviceToExecute(workspace)
-    .then((res: any) => {
-      console.log(res)
+    .then((success: boolean) => {
+      if(!success) {
+        this.setErrorMessage("Houve um erro interno ao processar esse serviço.")
+        console.error("There was an error while processing this service: ", kind, key, serviceName)
+        return;
+      }
       const timeEnd = Date.now();
       const timeSpent = (timeEnd - timestart)/1000;
       const message = this.createMessageDone(serviceName, timeSpent)
       this.atualizeWorkspaceServiceState(workspaceName, kind, key)
       this.alertService.show(message.title, message.message)
+      this.loadingService.stopLoading()
     })
   }
 
@@ -124,6 +135,10 @@ export class WorkspaceComponent implements OnInit {
     this.activeListeItem(itemList)
     this.toggleEntryOut()
 
+  }
+
+  private setErrorMessage(mensagem: string) {
+    this.alertService.show("Erro", mensagem)
   }
 
   private createMessageDone(title: string, timeOfDuration: number) {
