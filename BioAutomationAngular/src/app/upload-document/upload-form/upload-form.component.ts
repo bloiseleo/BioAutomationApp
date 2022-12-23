@@ -11,6 +11,7 @@ export class UploadFormComponent {
   workspaceName?: string
   refseqCode?:string
   mutationsFile?: File
+  proteinSequence?: string;
 
   constructor(private createWorkspaceService: CreateWorkspaceService) {}
 
@@ -86,7 +87,7 @@ export class UploadFormComponent {
     if(!this.validate(validations)) {
       return
     }
-    this.createWorkspaceService.create(this.workspaceName as string, this.mutationsFile, this.refseqCode as string)
+    this.createWorkspaceService.create(this.workspaceName as string, this.mutationsFile, this.refseqCode as string, this.proteinSequence as string)
     .then(res => console.log("Resultado do upload", res))
 
   }

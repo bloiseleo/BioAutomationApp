@@ -16,6 +16,10 @@
         <label for="refseq">RefSeq:</label>
         <input type="text" name="refseq" id="refseq" [(ngModel)]="refseqCode">
       </div>
+      <div class="upload__form__form__inputGroup">
+        <label for="refseq">Protein Sequence:</label>
+        <textarea class="upload__form__form__inputGroup--textarea" name="protein_sequence" id="protein_sequence" cols="30" rows="10" [(ngModel)]="proteinSequence"></textarea>
+      </div>
       <div class="upload__form__form__inputGroup"><label for="file">Arquivo:</label>
         <button type="button" (click)="handleClickUpload()" class="upload__form__form__inputGroup--file">Escolha o arquivo...</button>
         <input type="file" (change)="handleUploadFile($event)" accept=".xml" name="file" id="file">

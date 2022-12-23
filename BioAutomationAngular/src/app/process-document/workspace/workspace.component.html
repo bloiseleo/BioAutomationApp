@@ -1,1 +1,32 @@
-<p>workspace works!</p>
+<section class="workspace">
+  <header class="workspace__header">
+    <nav class="workspace__header__menu">
+      <ul class="workspace__header__menu__list" (click)="handleClickKindProcess($event)">
+        <li class="workspace__header__menu__item active">
+          Entrada
+        </li>
+        <li class="workspace__header__menu__item">
+          Saída
+        </li>
+      </ul>
+    </nav>
+    <form class="workspace__form">
+      <div class="container">
+        <select  name="workspace__selector" id="workspace__selector" class="workspace__form__selector" [(ngModel)]="workspaceNameSelected" (ngModelChange)="handleWorkspaceChanged()" >
+          <option value="0" disabled selected>Selecione um Workspace...</option>
+          <option *ngFor="let workspaceName of workspacesNames" value="{{workspaceName}}">{{workspaceName}}</option>
+        </select>
+      </div>
+    </form>
+  </header>
+  <main class="workspace__main">
+    <div class="container">
+      <section *ngIf="showEntry" class="workspace__main__services">
+        <app-process *ngFor="let entryService of entryServices" [name]="entryService.name" [description]="entryService.description"  [kind]="entryService.kind" [key]="entryService.key" [processDone]="entryService.done" (onExecute)="handleExecute($event)"></app-process>
+      </section>
+      <section *ngIf="showOut" class="workspace__main__services">
+        Mostra Saída
+      </section>
+    </div>
+  </main>
+</section>

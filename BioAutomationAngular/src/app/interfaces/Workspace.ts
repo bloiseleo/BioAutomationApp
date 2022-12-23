@@ -10,9 +10,12 @@ interface Workspace {
           "path_to_file": string
       }
   },
-  "protein_sequence": string
+  "protein_sequence": string,
+  [key: string]: any
 }
 
-interface Workspaces extends Array<Workspace> {}
+interface Workspaces {
+  [key: string]: Workspace
+}
 
 export {Workspace, Workspaces}

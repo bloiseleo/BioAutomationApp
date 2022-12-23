@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class CreateWorkspaceService {
+export class PredictSNPEntryService {
 
   constructor(private electronService: ElectronAPIService) {
     if(!this.electronService.isElectron()) {
@@ -12,9 +12,8 @@ export class CreateWorkspaceService {
     }
   }
 
-  async create(workspaceName: string, file: any, refseq: string, proteinSequence: string): Promise<boolean> {
-    const filepath = file.path as string
-    const result = await this.electronService.uploadDocument(workspaceName, filepath, refseq, proteinSequence)
+  async process(workspaceName: string): Promise<boolean> {
+    const result = this.electronService.processPredictSNPEntry(workspaceName)
     return result;
   }
 }

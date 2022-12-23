@@ -1,0 +1,39 @@
+.workspace {
+  height: 100%;
+}
+
+.workspace__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 10%;
+}
+
+.workspace__header__menu__list {
+  background-color: var(--dark_blue);
+  display: flex;
+  justify-content: space-around;
+}
+
+.workspace__header__menu__item {
+  color: var(--light_blue);
+  cursor: pointer;
+  font-weight: lighter;
+  padding: 1rem;
+}
+
+.workspace__header__menu__item.active {
+  color: var(--white);
+}
+
+.workspace__form__selector {
+  border: none;
+  color: var(--black);
+  font-size: 2rem;
+  outline: none;
+  width: 450px;
+}
+
+.workspace__main {
+  margin-top: 3rem;
+}

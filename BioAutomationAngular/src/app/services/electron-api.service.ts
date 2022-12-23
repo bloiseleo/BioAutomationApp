@@ -30,9 +30,9 @@ export class ElectronAPIService {
     return extraResourcesPath
   }
 
-  async uploadDocument(workspaceName: string, file: string, refseq: string): Promise<boolean> {
+  async uploadDocument(workspaceName: string, file: string, refseq: string, proteinSequence: string): Promise<boolean> {
     try {
-      const result = await this._window?.electronAPI.uploadDocument(workspaceName, file, refseq)
+      const result = await this._window?.electronAPI.uploadDocument(workspaceName, file, refseq, proteinSequence)
       return Boolean(result);
     } catch(error: unknown) {
       console.error(error)
@@ -47,6 +47,19 @@ export class ElectronAPIService {
         return false;
       }
 
+      return result
+    } catch(error: unknown) {
+      console.error(error)
+      return false;
+    }
+  }
+
+  async processPredictSNPEntry(workspaceName: string): Promise<boolean> {
+    try {
+      const result = await this._window?.electronAPI.processPredictSNPEntry(workspaceName)
+      if(typeof result === "undefined") {
+        return false;
+      }
       return result
     } catch(error: unknown) {
       console.error(error)

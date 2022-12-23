@@ -61,6 +61,15 @@
   width: 60.5%;
 }
 
+.upload__form__form__inputGroup--textarea {
+  border: 1.5px solid var(--dark_blue);
+  border-radius: 13px;
+  color: var(--black);
+  outline: none;
+  padding: 1rem;
+  resize: none;
+}
+
 .upload__form__form__inputGroup--file {
   background-color: var(--dark_blue);
   border: none;
