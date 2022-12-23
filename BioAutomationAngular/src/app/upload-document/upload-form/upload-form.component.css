@@ -27,13 +27,16 @@
 }
 
 .upload__form__form--error {
+  align-self: center;
   background: var(--light_red);
   border-radius: 13px;
   border: 1px solid var(--red);
   color: var(--red);
-  font-size: 1.3rem;
+  margin: 0.7rem 0;
   opacity: 0;
-  padding: 1rem;
+  padding: .5rem;
+  text-align: center;
+  width: 70%;
 }
 
 .upload__form__form--error.show {
