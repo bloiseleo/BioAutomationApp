@@ -73,3 +73,7 @@ html, body {
 .container {
   padding: .5rem;
 }
+
+body {
+  position: relative;
+}

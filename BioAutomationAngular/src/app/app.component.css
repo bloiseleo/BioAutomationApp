@@ -1,5 +1,6 @@
 :host {
   display: flex;
+  position: relative;
   height: 100%;
 }
 
@@ -12,3 +13,36 @@
   width: 91%;
 }
 
+
+.alert {
+  background-color: var(--light_orange);
+  border-radius: 4px;
+  bottom: 50px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  left: 50px;
+  opacity: 0;
+  padding: 1rem;
+  position: absolute;
+  transition: opacity .2s ease-in-out;
+  width: 300px;
+}
+
+.alert.show {
+  opacity: 1;
+}
+
+.alert__header {
+  margin-bottom: 2rem;
+  position: relative;
+
+}
+
+.alert__header--close {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
