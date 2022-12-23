@@ -57,7 +57,7 @@ function createWindow () {
   ipcMain.handle("processEntry:predictSNP", async (_, data) => {
     const {pathToCLIApp} = extraResources;
     const {workspaceName} = data;
-    const command = `${pathToCLIApp} get-workspace --name="${workspaceName}"`
+    const command = `${pathToCLIApp} predict-snp-entry --name="${workspaceName}"`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {
@@ -69,7 +69,8 @@ function createWindow () {
   })
   ipcMain.handle("get:workspace", async (_, data) => {
     const {workspaceName} = data;
-    const command = `${pathToCLIApp}  --name="${workspaceName}"`
+    const {pathToCLIApp} = extraResources;
+    const command = `${pathToCLIApp} get-workspace  --name="${workspaceName}"`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {

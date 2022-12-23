@@ -25,6 +25,11 @@ export class ElectronAPIService {
     }
   }
 
+  async workspaceExists(workspaceName: string): Promise<boolean> {
+    const result = await this._window?.electronAPI.workspaceExists(workspaceName)
+    return Boolean(result)
+  }
+
   async getExtraResourcesPath(): Promise<string | undefined> {
     const extraResourcesPath = await this._window?.electronAPI.getExtraResourcesPath()
     return extraResourcesPath
