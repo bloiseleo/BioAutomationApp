@@ -14,6 +14,7 @@ export class UploadFormComponent {
   workspaceName?: string
   refseqCode?:string
   mutationsFile?: File
+  proteinHeader?: string;
   proteinSequence?: string;
 
   constructor(
@@ -147,7 +148,7 @@ export class UploadFormComponent {
         this.setError("Esse Workspace já existe.", "#name")
         return;
       }
-      this.createWorkspaceService.create(this.workspaceName as string, this.mutationsFile, this.refseqCode as string, this.proteinSequence as string)
+      this.createWorkspaceService.create(this.workspaceName as string, this.mutationsFile, this.refseqCode as string, this.proteinSequence as string, this.proteinHeader as string)
       .then(success => {
         this.loadingService.stopLoading()
         if(!success) {
@@ -212,10 +213,12 @@ export class UploadFormComponent {
   }
 
   private resetForm() {
-    this.workspaceName = "";
-    this.proteinSequence = "";
-    this.refseqCode = "";
+    this.workspaceName = undefined;
+    this.proteinSequence = undefined;
+    this.refseqCode = undefined;
     this.mutationsFile = undefined;
+    this.proteinHeader = undefined;
     this.resetButtonUpload();
   }
+
 }

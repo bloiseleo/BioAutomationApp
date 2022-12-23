@@ -17,6 +17,10 @@
         <input type="text" name="refseq" id="refseq" [(ngModel)]="refseqCode">
       </div>
       <div class="upload__form__form__inputGroup">
+        <label for="proteinHeader">Protein Header:</label>
+        <input type="text" name="proteinHeader" id="proteinHeader" [(ngModel)]="proteinHeader">
+      </div>
+      <div class="upload__form__form__inputGroup">
         <label for="refseq">Protein Sequence:</label>
         <textarea (change)="handleChange()" class="upload__form__form__inputGroup--textarea" name="protein_sequence" id="protein_sequence" cols="30" rows="10" [(ngModel)]="proteinSequence"></textarea>
       </div>

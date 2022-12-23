@@ -32,7 +32,7 @@ function createWindow () {
   ipcMain.handle("get:extraResourcesPath", async () => extraResources.pathToCLIApp)
   ipcMain.handle("make:uploadDocument", async (_, data) => {
     const {pathToCLIApp} = extraResources;
-    const command = `${pathToCLIApp} create-workspace --name="${data['workspaceName']}" --refseq="${data['refseq']}" --file="${data['file']}" --protein_sequence="${data['proteinSequence']}"`
+    const command = `${pathToCLIApp} create-workspace --name="${data['workspaceName']}" --refseq="${data['refseq']}" --file="${data['file']}" --protein_sequence="${data['proteinSequence']}" --protein_header="${data['proteinHeader']}"`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {

@@ -37,7 +37,7 @@ class Configuration:
     def save(self):
         FileHandler.save_file_in(self.path_to_configuration, self.configuration)
 
-    def create_settings_to_workspace(self, name: str, protein_sequence: str) -> dict:
+    def create_settings_to_workspace(self, name: str, protein_header: str, protein_sequence: str) -> dict:
         path_to_workspace = self.create_path_to_workspace(name)
         return {
             "name": name,
@@ -46,9 +46,10 @@ class Configuration:
             "entry": {
                 "predictSNP": {
                     "done": False,
-                    "path_to_file": os.path.join(path_to_workspace, "predict_snp_entry.json")
+                    "path_to_file": os.path.join(path_to_workspace, "predict_snp_entry.txt")
                 }
             },
+            "protein_header": protein_header,
             "protein_sequence": protein_sequence
         }
 
@@ -62,11 +63,11 @@ class Configuration:
     def save_workspace(self, path_to_settings: str, workspace_settings: dict) -> None:
         FileHandler.save_file_in(path_to_settings, workspace_settings)
 
-    def create_workspace(self, name, file, refseq, remove_truncating, protein_sequence):
+    def create_workspace(self, name, file, refseq, remove_truncating, protein_header: str, protein_sequence):
         name = StringDoctor.treat_workspace_name(name)
         if(self.check_if_workspace_exist(name)):
             raise WorkspaceAlreadyExistsException(f"{name} - Já existe esse workspace")
-        workspace_settings = self.create_settings_to_workspace(name, protein_sequence)
+        workspace_settings = self.create_settings_to_workspace(name, protein_header, protein_sequence)
         FileHandler.create_folder(workspace_settings['path'])
         path_to_settings = os.path.join(workspace_settings['path'], 'settings.json')
         self.save_workspace(path_to_settings, workspace_settings)
@@ -92,7 +93,6 @@ class Configuration:
         name = StringDoctor.treat_workspace_name(name)
         if name not in self.configuration['workspaces']:
             return False
-
         path_to_workspace = self.create_path_to_workspace(name)
         path_to_settings = os.path.join(path_to_workspace, 'settings.json')
         settings = FileHandler.read_file_contents(path_to_settings)

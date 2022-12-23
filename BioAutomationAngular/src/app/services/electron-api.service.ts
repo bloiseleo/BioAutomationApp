@@ -35,9 +35,9 @@ export class ElectronAPIService {
     return extraResourcesPath
   }
 
-  async uploadDocument(workspaceName: string, file: string, refseq: string, proteinSequence: string): Promise<boolean> {
+  async uploadDocument(workspaceName: string, file: string, refseq: string, proteinSequence: string, proteinHeader: string): Promise<boolean> {
     try {
-      const result = await this._window?.electronAPI.uploadDocument(workspaceName, file, refseq, proteinSequence)
+      const result = await this._window?.electronAPI.uploadDocument(workspaceName, file, refseq, proteinSequence, proteinHeader)
       return Boolean(result);
     } catch(error: unknown) {
       console.error(error)

@@ -16,9 +16,9 @@ export class CreateWorkspaceService {
     return this.electronService.workspaceExists(workspaceName)
   }
 
-  async create(workspaceName: string, file: any, refseq: string, proteinSequence: string): Promise<boolean> {
+  async create(workspaceName: string, file: any, refseq: string, proteinSequence: string, proteinHeader: string): Promise<boolean> {
     const filepath = file.path as string
-    const result = await this.electronService.uploadDocument(workspaceName, filepath, refseq, proteinSequence)
+    const result = await this.electronService.uploadDocument(workspaceName, filepath, refseq, proteinSequence, proteinHeader)
     return result;
   }
 }
