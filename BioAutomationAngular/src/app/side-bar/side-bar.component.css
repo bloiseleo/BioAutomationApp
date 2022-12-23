@@ -1,5 +1,6 @@
 .sidebar {
   background-color: var(--dark_blue);
+  box-shadow: 1px 0px 20px 0px rgba(0,0,0,0.75);
 }
 
 .sidebar, .container {

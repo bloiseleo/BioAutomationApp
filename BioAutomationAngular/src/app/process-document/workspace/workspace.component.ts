@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {Workspace, Workspaces} from 'src/app/interfaces/Workspace';
 import { PredictSNPEntryService } from 'src/app/services/predict-snpentry.service';
 import Process from 'src/app/interfaces/Process';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-workspace',
@@ -19,14 +20,16 @@ export class WorkspaceComponent implements OnInit {
   workspaceNameSelected?: string;
   workspaceSelected?: Workspace;
 
-  constructor(private electronService: ElectronAPIService,
+  constructor(
+    private alertService: AlertService,
+    private electronService: ElectronAPIService,
     public predictSNPEntry: PredictSNPEntryService) {
       this.entryServices.push({
         name: "Predict SNP",
         key: "predictSNP",
         description: "Descrição do Serviço",
         kind: "entry",
-        done: this.workspaceSelected?.entry.predictSNP.done || false
+        done: false
       })
   }
 
@@ -56,24 +59,45 @@ export class WorkspaceComponent implements OnInit {
 
   handleExecute($event:{
     key: string,
-    kind: string
+    kind: string,
+    serviceName: string
   } ) {
-    const {key, kind} = $event
+    if(this.workspaceNameSelected === undefined) {
+      throw new Error("Workspace must be selected to execute functions")
+    }
+    if(this.workspaceSelected === undefined) {
+      throw new Error("Workspace must be selected to execute functions")
+    }
+    const workspaceName = this.workspaceNameSelected as string;
+    const workspace = this.workspaceSelected as Workspace;
+    const {key, kind, serviceName} = $event
     const options = this.executeOptions as any;
     const optionsWanted: any = options[kind];
     if(!Object.keys(optionsWanted).includes(key)) {
-      console.error("Serviço inválido")
-      return;
+      throw new Error(`Kind => ${kind} does not have the service ${key}`)
     }
     const serviceToExecute = optionsWanted[key];
-    serviceToExecute(this.workspaceSelected)
+    const timestart = Date.now();
+    serviceToExecute(workspace)
     .then((res: any) => {
       console.log(res)
+      const timeEnd = Date.now();
+      const timeSpent = (timeEnd - timestart)/1000;
+      const message = this.createMessageDone(serviceName, timeSpent)
+      this.atualizeWorkspaceServiceState(workspaceName, kind, key)
+      this.alertService.show(message.title, message.message)
     })
   }
 
   handleWorkspaceChanged() {
-    this.workspaceSelected = this.workspaces[this.workspaceNameSelected as string]
+    const workspace = this.workspaces[this.workspaceNameSelected as string];
+
+    if(typeof workspace === "undefined") {
+      throw new Error("Workpsace selected is not valid")
+    }
+
+    this.workspaceSelected = workspace;
+    this.atualizeListOfServices()
   }
 
   handleClickKindProcess($event: Event) {
@@ -100,6 +124,36 @@ export class WorkspaceComponent implements OnInit {
     this.activeListeItem(itemList)
     this.toggleEntryOut()
 
+  }
+
+  private createMessageDone(title: string, timeOfDuration: number) {
+    return {
+      title: title,
+      message: `O serviço foi executado em ${timeOfDuration} segundos e já está disponível para download`
+    }
+  }
+
+  private atualizeWorkspaceServiceState(workspaceName: string, serviceKind: string, serviceName: string) {
+    if(this.workspaceSelected === undefined) {
+      throw new Error("Workpsace was not selected.")
+    }
+    if(this.workspaceSelected.name !== workspaceName) {
+      throw new Error("Workspace Name passed is different from workspace selected");
+    }
+    const newWorkspaceSelected = {...this.workspaceSelected};
+    newWorkspaceSelected[serviceKind][serviceName]['done'] = true;
+    this.workspaceSelected = newWorkspaceSelected;
+    this.workspaces[workspaceName] = {...this.workspaceSelected};
+    this.atualizeListOfServices();
+  }
+
+  private atualizeListOfServices() {
+    this.entryServices = this.entryServices.map(entry => {
+      const workspaceSelected = this.workspaceSelected as Workspace;
+      const cloneEntry = {...entry}
+      cloneEntry.done = workspaceSelected[entry.kind][entry.key]['done']
+      return cloneEntry;
+    })
   }
 
   private resetDataSetOfList(list: HTMLElement) {
