@@ -2,6 +2,7 @@ import { ValidationService } from './../../services/validation.service';
 import { CreateWorkspaceService } from './../../services/create-workspace.service';
 import { Component } from '@angular/core';
 import { LoadingService } from 'src/app/services/loading.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-upload-form',
@@ -15,8 +16,11 @@ export class UploadFormComponent {
   mutationsFile?: File
   proteinSequence?: string;
 
-  constructor(private createWorkspaceService: CreateWorkspaceService, private loadingService: LoadingService,
-    private validationService: ValidationService) {}
+  constructor(
+    private createWorkspaceService: CreateWorkspaceService,
+    private loadingService: LoadingService,
+    private validationService: ValidationService,
+    private alertService: AlertService) {}
 
   get validations() {
     const validations: {
@@ -149,6 +153,8 @@ export class UploadFormComponent {
         if(!success) {
           this.setError("Houve um erro ao executar o Upload do Arquivo.", "#name")
         }
+        this.alertService.show("Workspace Criado!", `O Workspace de nome ${this.workspaceName} foi criado.`)
+        this.resetForm()
       })
     })
   }
@@ -205,4 +211,11 @@ export class UploadFormComponent {
     return false;
   }
 
+  private resetForm() {
+    this.workspaceName = "";
+    this.proteinSequence = "";
+    this.refseqCode = "";
+    this.mutationsFile = undefined;
+    this.resetButtonUpload();
+  }
 }
