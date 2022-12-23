@@ -29,7 +29,7 @@ export class WorkspaceComponent implements OnInit {
       this.entryServices.push({
         name: "Predict SNP",
         key: "predictSNP",
-        description: "Descrição do Serviço",
+        description: "Gera a entrada necessária para utilizar o Predict SNP de acordo com o site: https://loschmidt.chemi.muni.cz/predictsnp1/",
         kind: "entry",
         done: false
       })
