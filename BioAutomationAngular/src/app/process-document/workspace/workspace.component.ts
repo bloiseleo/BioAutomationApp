@@ -100,6 +100,25 @@ export class WorkspaceComponent implements OnInit {
     })
   }
 
+  handleDownload($event: {
+    key: string,
+    kind: string,
+    serviceName: string
+  }) {
+    if(this.workspaceNameSelected === undefined) {
+      this.setErrorMessage("Um workspace deve ser escolhido antes de executar as funções existentes.")
+      throw new Error("Workspace must be selected to execute functions")
+    }
+    if(this.workspaceSelected === undefined) {
+      this.setErrorMessage("Um workspace deve ser escolhido antes de executar as funções existentes.")
+      throw new Error("Workspace must be selected to execute functions")
+    }
+    const workspace = this.workspaceSelected as Workspace;
+    const {key, kind} = $event
+    const pathToFile = workspace[kind][key]['path_to_file'] as string;
+    this.downloadFile(pathToFile)
+  }
+
   handleWorkspaceChanged() {
     const workspace = this.workspaces[this.workspaceNameSelected as string];
 
@@ -135,6 +154,13 @@ export class WorkspaceComponent implements OnInit {
     this.activeListeItem(itemList)
     this.toggleEntryOut()
 
+  }
+
+  private downloadFile(path: string) {
+    const link = document.createElement('a');
+    link.setAttribute("download", "predictSNP_entryFile");
+    link.setAttribute('href', path);
+    link.click()
   }
 
   private setErrorMessage(mensagem: string) {

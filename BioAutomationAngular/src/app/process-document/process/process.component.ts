@@ -23,9 +23,28 @@ export class ProcessComponent {
     kind: string,
     serviceName: string
   }>()
+  @Output() onDownload: EventEmitter<{
+    key: string,
+    kind: string,
+    serviceName: string
+  }> = new EventEmitter<
+  {
+    key: string,
+    kind: string,
+    serviceName: string
+  }
+  >()
 
   handleClickExecute() {
     this.onExecute.emit({
+      key: this.key || "",
+      kind: this.kind || "",
+      serviceName: this.name || ""
+    })
+  }
+
+  handleDownload() {
+    this.onDownload.emit({
       key: this.key || "",
       kind: this.kind || "",
       serviceName: this.name || ""
