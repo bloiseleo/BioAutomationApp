@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class LoadingService {
 
-  inputToBlock?: HTMLElement;
+  inputToBlock?: HTMLElement | NodeList;
   menu?: HTMLElement;
 
   freezeClickFunction: (event: Event) => void = (event) => {
@@ -22,7 +22,7 @@ export class LoadingService {
     document.removeEventListener("click", this.freezeClickFunction)
   }
 
-  startLoading(inputToBlock: HTMLElement) {
+  startLoading(inputToBlock: HTMLElement | NodeListOf<HTMLElement>) {
     this.inputToBlock = inputToBlock;
     const body = document.querySelector("body");
     const menu = document.querySelector(".sidebar__menu") as HTMLElement | null;
@@ -36,6 +36,13 @@ export class LoadingService {
     }
     body.style.cursor = "wait"
     this.freezeClick()
+    if(this.inputToBlock instanceof NodeList) {
+      this.inputToBlock.forEach((input) => {
+        const inputElement = input as HTMLElement;
+        inputElement.classList.add("blocked")
+      })
+      return;
+    }
     this.inputToBlock.classList.add("blocked")
   }
 
@@ -51,7 +58,14 @@ export class LoadingService {
     }
 
     this.unfreezeClick()
-    this.inputToBlock?.classList.remove("blocked")
+    if(this.inputToBlock instanceof NodeList) {
+      this.inputToBlock.forEach((input) => {
+        const inputElement = input as HTMLElement;
+        inputElement.classList.remove("blocked")
+      })
+    } else {
+      this.inputToBlock?.classList.remove("blocked")
+    }
     this.menu.style.display = 'unset'
     this.inputToBlock = undefined;
     this.menu = undefined;
