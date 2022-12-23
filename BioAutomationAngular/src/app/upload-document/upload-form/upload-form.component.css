@@ -93,10 +93,10 @@
   color: var(--white);
   cursor: pointer;
   font-size: 2rem;
+  height: 3.5rem;
   margin-top: 1rem;
   min-width: 300px;
   outline: none;
-  height: 3.5rem;
 }
 
 .upload__form__form input[type="submit"]:hover {
