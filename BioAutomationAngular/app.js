@@ -64,7 +64,7 @@ function createWindow () {
         console.error(stderr)
         return false;
       }
-      return data['stdout']
+      return true;
     })
   })
   ipcMain.handle("get:workspace", async (_, data) => {
