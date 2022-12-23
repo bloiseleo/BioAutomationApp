@@ -89,6 +89,7 @@ class Configuration:
         self.save()
     
     def get_workspace(self, name) -> bool | dict:
+        name = StringDoctor.treat_workspace_name(name)
         if name not in self.configuration['workspaces']:
             return False
 

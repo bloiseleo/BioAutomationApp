@@ -25,6 +25,17 @@ def create_workspace(ctx, name, refseq, file, protein_sequence):
 @cli.command(options_metavar="--name \"workspace name\"")
 @click.option('--name', default='',metavar="<string>", help="Name of Workspace")
 @click.pass_context
+def get_workspace(ctx, name):
+    config = ctx.obj['config']
+    workspace = config.get_workspace(name)
+    if workspace == False:
+        print(0)
+    else:
+        print(1)
+
+@cli.command(options_metavar="--name \"workspace name\"")
+@click.option('--name', default='',metavar="<string>", help="Name of Workspace")
+@click.pass_context
 def predict_snp_entry(ctx, name):
     config = ctx.obj['config']
     workspace = config.get_workspace(name)

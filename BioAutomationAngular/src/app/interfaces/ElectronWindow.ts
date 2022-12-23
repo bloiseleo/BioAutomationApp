@@ -7,6 +7,7 @@ export interface ElectronWindow extends Window {
     getExtraResourcesPath: () => Promise<string>,
     uploadDocument: (workspaceName: string, file: string, refseq: string, proteinSequence: string) => Promise<boolean>,
     listAllWorkspaces: () => Promise<string | boolean>,
-    processPredictSNPEntry: (workspaceName: string) => Promise<boolean>
+    processPredictSNPEntry: (workspaceName: string) => Promise<boolean>,
+    workspaceExists: (workspaceName: string) => Promise<boolean>
   }
 }
