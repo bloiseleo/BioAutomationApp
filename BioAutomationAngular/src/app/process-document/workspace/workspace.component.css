@@ -10,30 +10,47 @@
 }
 
 .workspace__header__menu__list {
-  background-color: var(--dark_blue);
   display: flex;
-  justify-content: space-around;
 }
 
 .workspace__header__menu__item {
+  background-color: var(--dark_blue);
   color: var(--light_blue);
   cursor: pointer;
+  display: flex;
   font-weight: lighter;
+  justify-content: center;
   padding: 1rem;
+  width: 50%;
+}
+
+.workspace__header__menu__item:nth-child(2) {
+  border-left: 4px solid var(--light_blue);
 }
 
 .workspace__header__menu__item.active {
-  color: var(--white);
+  background-color: var(--white);
+  z-index: -1;
+}
+
+.workspace__form {
+  margin-left: 1rem;
+}
+
+.workspace__form__label {
+  display: block;
+  margin-bottom: 1rem;
 }
 
 .workspace__form__selector {
-  border: none;
-  color: var(--black);
+  border: 1px solid var(--dark_blue);
+  color: var(--dark_blue);
   font-size: 2rem;
   outline: none;
+  padding: 0 3rem;
   width: 450px;
 }
 
 .workspace__main {
-  margin-top: 3rem;
+  margin-top: 6rem;
 }

@@ -16,16 +16,19 @@ export class ProcessComponent {
   @Input() processDone?: boolean;
   @Output() onExecute: EventEmitter<{
     key: string,
-    kind: string
+    kind: string,
+    serviceName: string
   }> = new EventEmitter<{
     key: string,
-    kind: string
+    kind: string,
+    serviceName: string
   }>()
 
   handleClickExecute() {
     this.onExecute.emit({
       key: this.key || "",
-      kind: this.kind || ""
+      kind: this.kind || "",
+      serviceName: this.name || ""
     })
   }
 

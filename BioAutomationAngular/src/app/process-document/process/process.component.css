@@ -2,6 +2,7 @@
   background-color: var(--dark_blue);
   border-radius: 10px;
   display: flex;
+  margin-left: 1rem;
   padding: 1rem;
   position: relative;
 }

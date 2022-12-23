@@ -12,8 +12,8 @@
     </nav>
     <form class="workspace__form">
       <div class="container">
+        <label for="workspace__selector" class="workspace__form__label"> Selecione um Workspace: </label>
         <select  name="workspace__selector" id="workspace__selector" class="workspace__form__selector" [(ngModel)]="workspaceNameSelected" (ngModelChange)="handleWorkspaceChanged()" >
-          <option value="0" disabled selected>Selecione um Workspace...</option>
           <option *ngFor="let workspaceName of workspacesNames" value="{{workspaceName}}">{{workspaceName}}</option>
         </select>
       </div>
