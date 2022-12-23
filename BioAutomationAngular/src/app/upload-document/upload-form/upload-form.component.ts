@@ -1,5 +1,6 @@
 import { CreateWorkspaceService } from './../../services/create-workspace.service';
 import { Component } from '@angular/core';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-upload-form',
@@ -13,7 +14,7 @@ export class UploadFormComponent {
   mutationsFile?: File
   proteinSequence?: string;
 
-  constructor(private createWorkspaceService: CreateWorkspaceService) {}
+  constructor(private createWorkspaceService: CreateWorkspaceService, private loadingService: LoadingService) {}
 
   validate(validationObject: Array<{
     name: string,
@@ -69,6 +70,9 @@ export class UploadFormComponent {
   }
 
   handleSubmit($event: Event) {
+    const form = $event.target as HTMLElement;
+    const inputSubmit = form.querySelector(`.upload__form__form input[type="submit"]`) as HTMLElement;
+    this.loadingService.startLoading(inputSubmit)
     this.resetValidations()
     const validations = [
       {
@@ -85,10 +89,16 @@ export class UploadFormComponent {
       }
     ]
     if(!this.validate(validations)) {
+      this.loadingService.stopLoading()
       return
     }
     this.createWorkspaceService.create(this.workspaceName as string, this.mutationsFile, this.refseqCode as string, this.proteinSequence as string)
-    .then(res => console.log("Resultado do upload", res))
+    .then(success => {
+      this.loadingService.stopLoading()
+      if(!success) {
+        this.setError("Houve um erro ao executar o Upload do Arquivo.", "#name")
+      }
+    })
 
   }
 
@@ -134,6 +144,9 @@ export class UploadFormComponent {
     const element = document.querySelector(selector) as HTMLElement
     element.focus()
     errorParagraph.classList.add("show")
+    setTimeout(() => {
+      errorParagraph.classList.remove("show")
+    }, 5000)
     return false;
   }
 
