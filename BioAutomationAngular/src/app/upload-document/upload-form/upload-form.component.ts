@@ -1,3 +1,4 @@
+import { ValidationList } from './../../interfaces/Validation';
 import { ValidationService } from './../../services/validation.service';
 import { CreateWorkspaceService } from './../../services/create-workspace.service';
 import { Component } from '@angular/core';
@@ -23,14 +24,8 @@ export class UploadFormComponent {
     private validationService: ValidationService,
     private alertService: AlertService) {}
 
-  get validations() {
-    const validations: {
-      value: any,
-      validationFunction: (...params: any) => {
-        valid: boolean,
-        message: string
-      }
-    }[] = [
+  get validations(): ValidationList {
+    const validations: ValidationList = [
       {
         value: this.workspaceName,
         validationFunction: (value: string) => {
