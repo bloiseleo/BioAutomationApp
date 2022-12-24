@@ -36,13 +36,11 @@ def generate_entry_to_predict_snp(workspace_name: str):
     ]
 )
 def test_predictsnp_out(result_file: str):
-    
     create_workspace(config)
     workspace = config.get_workspace("TDP43")
     generate_entry_to_predict_snp("TDP43")
     if(workspace == False):
         raise Exception("Workspace não foi selecionado")
-    
-    service = PredictSNPOut(workspace)
+    service = PredictSNPOut(workspace, result_file)
     service.getOut()
     assert FileHandler.file_exists(workspace['out']['predictSNP']['path_to_file']) == True

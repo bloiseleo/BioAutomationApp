@@ -49,6 +49,12 @@ class Configuration:
                     "path_to_file": os.path.join(path_to_workspace, "predict_snp_entry.txt")
                 }
             },
+            "out": {
+                "predictSNP": {
+                    "done": False,
+                    "path_to_file": os.path.join(path_to_workspace, "predict_snp_out.xlsx")
+                }
+            },
             "protein_header": protein_header,
             "protein_sequence": protein_sequence
         }
