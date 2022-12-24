@@ -22,7 +22,7 @@
       </div>
       <div class="upload__form__form__inputGroup">
         <label for="refseq">Protein Sequence:</label>
-        <textarea (change)="handleChange()" class="upload__form__form__inputGroup--textarea" name="protein_sequence" id="protein_sequence" cols="30" rows="10" [(ngModel)]="proteinSequence"></textarea>
+        <textarea (change)="handleChangeProteinHeader()" class="upload__form__form__inputGroup--textarea" name="protein_sequence" id="protein_sequence" cols="30" rows="10" [(ngModel)]="proteinSequence"></textarea>
       </div>
       <div class="upload__form__form__inputGroup"><label for="file">Arquivo:</label>
         <button type="button" (click)="handleClickUpload()" class="upload__form__form__inputGroup--file">Escolha o arquivo...</button>

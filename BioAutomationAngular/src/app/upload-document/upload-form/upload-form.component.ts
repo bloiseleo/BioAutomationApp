@@ -163,7 +163,7 @@ export class UploadFormComponent {
     const inputSubmit = form.querySelector(`.upload__form__form input[type="submit"]`) as HTMLElement;
     this.loadingService.startLoading(inputSubmit)
     const validations = this.validations;
-    const errorParagraph = document.querySelector(".upload__form__form--error") as HTMLElement
+    const errorParagraph = form.querySelector(".upload__form__form--error") as HTMLElement
     if(!errorParagraph) {
       throw new Error("Parágrafo de erro não foi recuperado")
     }
@@ -213,12 +213,8 @@ export class UploadFormComponent {
     this.buttonUploadText = this.mutationsFile.name;
   }
 
-  handleChange() {
+  handleChangeProteinHeader() {
     this.proteinSequence = this.proteinSequence?.replace(/\s/g, "")
-  }
-
-  resetButtonUpload() {
-    this.buttonUploadText = "Escolha o arquivo..."
   }
 
   set buttonUploadText(value: string) {
@@ -227,6 +223,11 @@ export class UploadFormComponent {
       return
     }
     button.innerHTML = value
+  }
+
+
+  private resetButtonUpload() {
+    this.buttonUploadText = "Escolha o arquivo..."
   }
 
   private resetForm() {
