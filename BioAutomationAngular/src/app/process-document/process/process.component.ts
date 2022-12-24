@@ -1,5 +1,4 @@
-import { Workspace } from 'src/app/interfaces/Workspace';
-import Process from 'src/app/interfaces/Process';
+import { ProcessEvent } from 'src/app/interfaces/Process';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
@@ -14,37 +13,19 @@ export class ProcessComponent {
   @Input() kind?: string;
   @Input() description?: string;
   @Input() processDone?: boolean;
-  @Output() onExecute: EventEmitter<{
-    key: string,
-    kind: string,
-    serviceName: string
-  }> = new EventEmitter<{
-    key: string,
-    kind: string,
-    serviceName: string
-  }>()
-  @Output() onDownload: EventEmitter<{
-    key: string,
-    kind: string,
-    serviceName: string
-  }> = new EventEmitter<
-  {
-    key: string,
-    kind: string,
-    serviceName: string
-  }
-  >()
+  @Output() onExecute: EventEmitter<ProcessEvent> = new EventEmitter<ProcessEvent>()
+  @Output() onDownload: EventEmitter<ProcessEvent> = new EventEmitter<ProcessEvent>()
 
   handleClickExecute() {
-    this.onExecute.emit({
-      key: this.key || "",
-      kind: this.kind || "",
-      serviceName: this.name || ""
-    })
+    this.emitEvent(this.onExecute)
   }
 
   handleDownload() {
-    this.onDownload.emit({
+    this.emitEvent(this.onDownload)
+  }
+
+  private emitEvent(eventEmitter: EventEmitter<ProcessEvent>) {
+    eventEmitter.emit({
       key: this.key || "",
       kind: this.kind || "",
       serviceName: this.name || ""

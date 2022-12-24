@@ -1,8 +1,9 @@
+import { ProcessAPI } from './../../interfaces/Process';
 import { ElectronAPIService } from './../../services/electron-api.service';
 import { Component, OnInit } from '@angular/core';
 import {Workspace, Workspaces} from 'src/app/interfaces/Workspace';
 import { PredictSNPEntryService } from 'src/app/services/predict-snpentry.service';
-import Process from 'src/app/interfaces/Process';
+import Process, { ProcessEvent } from 'src/app/interfaces/Process';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
 
@@ -35,12 +36,11 @@ export class WorkspaceComponent implements OnInit {
       })
   }
 
-  get executeOptions() {
+  get executeOptions(): ProcessAPI {
     return {
       "entry": {
         "predictSNP": (workspace: Workspace) => this.predictSNPEntry.process(workspace.name)
       }
-
     }
   }
 
@@ -59,11 +59,7 @@ export class WorkspaceComponent implements OnInit {
     })
   }
 
-  handleExecute($event:{
-    key: string,
-    kind: string,
-    serviceName: string
-  } ) {
+  handleExecute($event: ProcessEvent ) {
     if(this.workspaceNameSelected === undefined) {
       this.setErrorMessage("Um workspace deve ser escolhido antes de executar as funções existentes.")
       throw new Error("Workspace must be selected to execute functions")
@@ -75,8 +71,8 @@ export class WorkspaceComponent implements OnInit {
     const workspaceName = this.workspaceNameSelected as string;
     const workspace = this.workspaceSelected as Workspace;
     const {key, kind, serviceName} = $event
-    const options = this.executeOptions as any;
-    const optionsWanted: any = options[kind];
+    const options = this.executeOptions;
+    const optionsWanted = options[kind];
     if(!Object.keys(optionsWanted).includes(key)) {
       throw new Error(`Kind => ${kind} does not have the service ${key}`)
     }
@@ -100,11 +96,7 @@ export class WorkspaceComponent implements OnInit {
     })
   }
 
-  handleDownload($event: {
-    key: string,
-    kind: string,
-    serviceName: string
-  }) {
+  handleDownload($event: ProcessEvent) {
     if(this.workspaceNameSelected === undefined) {
       this.setErrorMessage("Um workspace deve ser escolhido antes de executar as funções existentes.")
       throw new Error("Workspace must be selected to execute functions")
@@ -132,7 +124,7 @@ export class WorkspaceComponent implements OnInit {
 
   handleClickKindProcess($event: Event) {
     const elementClicked = $event.target;
-    console.log(this.workspaceSelected)
+
     if(elementClicked === null) {
       return
     }
