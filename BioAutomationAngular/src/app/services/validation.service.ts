@@ -14,6 +14,8 @@ interface ValidationObject {
 })
 export class ValidationService {
 
+  errorNow?: NodeJS.Timeout
+
   constructor() { }
 
   validate(validationObject: Array<{
@@ -39,12 +41,20 @@ export class ValidationService {
     valid: boolean,
     message: string
   }, errorElement: HTMLElement ) {
+    if(this.errorNow) {
+      this.resetError(errorElement)
+    }
     errorElement.innerHTML = error.message
     errorElement.classList.add("show")
-    setTimeout(() => {
+    this.errorNow = setTimeout(() => {
       errorElement.classList.remove("show")
     }, 5000)
     return;
+  }
+
+  private resetError(errorElement: HTMLElement) {
+    errorElement.classList.remove('show')
+    clearTimeout(this.errorNow)
   }
 
 

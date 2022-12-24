@@ -176,14 +176,14 @@ export class UploadFormComponent {
     .then(exists => {
       if(exists) {
         this.loadingService.stopLoading()
-        this.setError("Esse Workspace já existe.", "#name")
+        this.validationService.setError({valid: false, message:"Esse Workspace já existe."}, errorParagraph)
         return;
       }
       this.createWorkspaceService.create(this.workspaceName as string, this.mutationsFile, this.refseqCode as string, this.proteinSequence as string, this.proteinHeader as string)
       .then(success => {
         this.loadingService.stopLoading()
         if(!success) {
-          this.setError("Houve um erro ao executar o Upload do Arquivo.", "#name")
+          this.validationService.setError({valid: false, message:"Houve um erro ao executar o Upload do Arquivo."}, errorParagraph)
           return;
         }
         this.alertService.show("Workspace Criado!", `O Workspace de nome ${this.workspaceName} foi criado.`)
@@ -227,21 +227,6 @@ export class UploadFormComponent {
       return
     }
     button.innerHTML = value
-  }
-
-  setError(message: string, selector: string) {
-    const errorParagraph = document.querySelector(".upload__form__form--error")
-    if(!errorParagraph) {
-      return false;
-    }
-    errorParagraph.innerHTML = message
-    const element = document.querySelector(selector) as HTMLElement
-    element.focus()
-    errorParagraph.classList.add("show")
-    setTimeout(() => {
-      errorParagraph.classList.remove("show")
-    }, 5000)
-    return false;
   }
 
   private resetForm() {
