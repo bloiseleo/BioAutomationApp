@@ -44,6 +44,20 @@ def predict_snp_entry(ctx, name):
     entry.getEntry(workspace['entry']['predictSNP']['path_to_file'])
     config.service_done(name, "entry", "predictSNP")
 
+@cli.command(options_metavar="--name \"workspace name\"")
+@click.option('--name', default='',metavar="<string>", help="Name of Workspace")
+@click.pass_context
+def predict_snp_out(ctx, name):
+    config = ctx.obj['config']
+    workspace = config.get_workspace(name)
+    if(workspace == False):
+        print(0)
+        return
+    entry = PredictSNPEntry(workspace['path_to_base_xlsx'], workspace['protein_header'],workspace['protein_sequence'])
+    entry.getEntry(workspace['entry']['predictSNP']['path_to_file'])
+    config.service_done(name, "entry", "predictSNP")
+    print(1)
+
 @cli.command()
 @click.pass_context
 def list_all_workspaces(ctx):

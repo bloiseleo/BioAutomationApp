@@ -1,6 +1,7 @@
 import pytest, tempfile, shutil, os
 from src.Configuration import Configuration
 from src.outServices.PredictSNPOut import PredictSNPOut
+from src.entryServices.PredictSNPEntry import PredictSNPEntry
 from src.helpers.FileHandler import FileHandler
 path_to_tempfolder = os.path.join(tempfile.gettempdir(), "bioautomation")
 shutil.rmtree(path_to_tempfolder)
@@ -19,6 +20,14 @@ def create_workspace(config: Configuration):
     config.create_workspace("TDP43", "C:\\Users\\leona\\workspace\\BioAutomationDesktopApp\\BioAutomationCLI_v2\\tests\\testdata\\snp_result.xml", 
         "NP_031401.1", True, ">sp|Q13148|TADBP_HUMAN TAR DNA-binding protein 43 OS=Homo sapiens OX=9606 GN=TARDBP PE=1 SV=1",
         "MSEYIRVTEDENDEPIEIPSEDDGTVLLSTVTAQFPGACGLRYRNPVSQCMRGVRLVEGILHAPDAGWGNLVYVVNYPKDNKRKMDETDASSAVKVKRAVQKTSDLIVLGLPWKTTEQDLKEYFSTFGEVLMVQVKKDLKTGHSKGFGFVRFTEYETQVKVMSQRHMIDGRWCDCKLPNSKQSQDEPLRSRKVFVGRCTEDMTEDELREFFSQYGDVMDVFIPKPFRAFAFVTFADDQIAQSLCGEDLIIKGISVHISNAEPKHNSNRQLERSGRFGGNPGGFGNQGGFGNSRGGGAGLGNNQGSNMGGGMNFGAFSINPAMMAAAQAALQSSWGMMGMLASQQNQSGPSGNNQNQGNMQREPNQAFGSGNNSYSGSNSGAAIGWGSASNAGSGSGFNGGFGSSMDSKSSGWGM")
+def generate_entry_to_predict_snp(workspace_name: str):
+    workspace = config.get_workspace("TDP43")
+    service = PredictSNPEntry(dataframe_path=workspace['path_to_base_xlsx'],
+        protein_header=workspace['protein_header'],
+        protein_seqence=workspace['protein_sequence'])
+    service.getEntry(workspace['entry']['predictSNP']['path_to_file'])
+    config.service_done(workspace_name, "entry", "predictSNP")
+
 
 @pytest.mark.parametrize(
     "result_file",
@@ -30,7 +39,7 @@ def test_predictsnp_out(result_file: str):
     
     create_workspace(config)
     workspace = config.get_workspace("TDP43")
-    
+    generate_entry_to_predict_snp("TDP43")
     if(workspace == False):
         raise Exception("Workspace não foi selecionado")
     
