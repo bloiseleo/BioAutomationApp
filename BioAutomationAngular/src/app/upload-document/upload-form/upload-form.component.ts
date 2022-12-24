@@ -122,6 +122,37 @@ export class UploadFormComponent {
             valid: true
           }
         }
+      },
+      {
+        value: this.proteinHeader,
+        validationFunction: (value: string) => {
+
+          if(typeof value !== "string") {
+            return {
+              message: "Você deve fornecer o cabeçalho da proteína desejada como texto.",
+              valid: false
+            }
+          }
+
+          if(value.length < 3) {
+            return {
+              message: "O cabeçalho da proteína deve ter mais do que 3 caracteres",
+              valid: false
+            }
+          }
+
+          if(!/^>/g.test(value)) {
+            return {
+              message: "Você deve fornecer o cabeçalho da proteína desejada no formato FASTA.",
+              valid: false
+            }
+          }
+
+          return  {
+            message: "",
+            valid: true
+          }
+        }
       }
     ]
     return validations;
