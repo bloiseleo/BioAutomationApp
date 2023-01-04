@@ -51,7 +51,7 @@ def predict_snp_entry(ctx, name):
 @click.pass_context
 def list_all_workspaces(ctx):
     config = ctx.obj['config']
-    print(config.list_all_workspace())
+    click.echo(config.list_all_workspace())
 
 if __name__ == '__main__':
     cli()
