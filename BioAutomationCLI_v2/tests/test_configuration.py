@@ -35,7 +35,9 @@ def test_if_settings_was_saved():
     ]
 )
 def test_if_create_workspace_is_working(name, file, refseq, remove_truncating, protein_header, protein_sequence):
-    config.create_workspace(name, file, refseq, remove_truncating, protein_header, protein_sequence)
+    result = config.create_workspace(name, file, refseq, remove_truncating, protein_header, protein_sequence)
+    assert result['status'] == 200
+    assert result['message'] == ""
     assert name in config.configuration['workspaces']
     settings_saved_on_disk = FileHandler.read_file_contents(path_to_settings)
     assert name in settings_saved_on_disk['workspaces']
@@ -69,8 +71,9 @@ def test_if_create_workspace_is_working(name, file, refseq, remove_truncating, p
     ]
 )
 def test_if_error_while_creating_workspace_is_working(name):
-    with pytest.raises(WorkspaceAlreadyExistsException) as e_info:
-        config.create_workspace(name, "", "", True, "", "")
+    result = config.create_workspace(name, "", "", True, "", "")
+    assert result['status'] == 401
+    assert result['message'] == "O workspace que você está tentando criar já existe"
 
 @pytest.mark.parametrize(
     "name",
@@ -81,9 +84,11 @@ def test_if_error_while_creating_workspace_is_working(name):
     ]
 )
 def test_get_workspace(name):
-    workpsace_settings = config.get_workspace(name)
-    assert workpsace_settings != False
-    assert workpsace_settings['name'] == name
+    result = config.get_workspace(name)
+    workspace_settings = json.loads(result['message'])
+    assert result['status'] == 200
+    assert workspace_settings['name'] == name
+
 @pytest.mark.parametrize(
     "name, kind, service_name",
     [
@@ -93,14 +98,17 @@ def test_get_workspace(name):
     ]
 )
 def test_service_done(name, kind, service_name):
-    config.service_done(name, kind, service_name)
-    workpsace_settings = config.get_workspace(name)
-    assert workpsace_settings[kind][service_name]['done'] == True
+    result = config.service_done(name, kind, service_name)
+    assert result['status'] == 200
+    result_workspace = config.get_workspace(name)
+    assert result_workspace['status'] == 200
+    workspace_settings = json.loads(result_workspace['message'])
+    assert workspace_settings[kind][service_name]['done'] == True
 
 
 def test_get_not_existing_workspace():
-    workpsace_settings = config.get_workspace("non_Existing_workspace")
-    assert workpsace_settings == False
+    result = config.get_workspace("non_Existing_workspace")
+    assert result['status'] == 404
 
 def test_list_all_workspaces():
     all_workspaces = config.list_all_workspace()
@@ -125,7 +133,12 @@ def test_list_all_workspaces():
     ]
 )
 def test_delete_workspace(name):
+<<<<<<< HEAD
     config.delete_workspace(name)
+=======
+    result = config.delete_workspace(name)
+    assert result['status'] == 200
+>>>>>>> refactoring_cliapp
     assert name not in config.configuration['workspaces']
     settings_saved = FileHandler.read_file_contents(path_to_settings)
     assert name not in settings_saved['workspaces']

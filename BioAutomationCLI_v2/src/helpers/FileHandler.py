@@ -7,7 +7,7 @@ class FileHandler:
         if not os.path.isdir(path):
             os.mkdir(path)
     @staticmethod
-    def folder_exists_in(path: str, wanted: str):
+    def folder_exists_in(path: str, wanted: str) -> bool:
         folders = os.listdir(path)
         return wanted in folders
     @staticmethod

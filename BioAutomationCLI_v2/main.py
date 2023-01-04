@@ -1,4 +1,4 @@
-import click
+import click, json
 from src.Configuration import Configuration
 from src.entryServices.PredictSNPEntry import PredictSNPEntry
 
@@ -17,32 +17,35 @@ def cli(ctx):
 @click.option("--protein_header", default="", metavar="<string>", help="The header of protein sequence in fasta format")
 @click.option('--protein_sequence', default='',metavar="<string>", help="The aminoacid sequence of protein sequence in fasta format.")
 @click.pass_context
-def create_workspace(ctx, name, refseq, file, protein_header, protein_sequence):
+def create_workspace(ctx, name: str, refseq: str, file: str, protein_header: str, protein_sequence: str):
     """dbsnp_to_excel is a python function that convert a file a raw .txt file containing information on missense mutations extracted from the dbSNP database and transforms it into an clean dataframe, which is then saved in an excel file (.xlsx)."""
-    config = ctx.obj['config']
-    config.create_workspace(name, file, refseq, True, protein_header, protein_sequence)
-    click.echo(1)
+    config: Configuration = ctx.obj['config']
+    result = config.create_workspace(name, file, refseq, True, protein_header, protein_sequence)
+    click.echo(json.dumps(result))
 
 @cli.command(options_metavar="--name \"workspace name\"")
 @click.option('--name', default='',metavar="<string>", help="Name of Workspace")
 @click.pass_context
 def get_workspace(ctx, name):
     config = ctx.obj['config']
-    workspace = config.get_workspace(name)
-    if workspace == False:
-        print(0)
-    else:
-        print(1)
+    result = config.get_workspace(name)
+    click.echo(json.dumps(result))
 
 @cli.command(options_metavar="--name \"workspace name\"")
 @click.option('--name', default='',metavar="<string>", help="Name of Workspace")
 @click.pass_context
 def predict_snp_entry(ctx, name):
-    config = ctx.obj['config']
-    workspace = config.get_workspace(name)
+    config: Configuration = ctx.obj['config']
+    result = config.get_workspace(name)
+    if(result['status'] == 404):
+        click.echo(json.dumps(result))
+        return
+    workspace: dict = json.loads(result['message'])
     entry = PredictSNPEntry(workspace['path_to_base_xlsx'], workspace['protein_header'],workspace['protein_sequence'])
     entry.getEntry(workspace['entry']['predictSNP']['path_to_file'])
-    config.service_done(name, "entry", "predictSNP")
+    result = config.service_done(name, "entry", "predictSNP")
+    click.echo(json.dumps(result))
+    return
 
 @cli.command(options_metavar="--name \"workspace name\"")
 @click.option('--name', default='',metavar="<string>", help="Name of Workspace")
@@ -62,7 +65,7 @@ def predict_snp_out(ctx, name):
 @click.pass_context
 def list_all_workspaces(ctx):
     config = ctx.obj['config']
-    print(config.list_all_workspace())
+    click.echo(config.list_all_workspace())
 
 if __name__ == '__main__':
     cli()
