@@ -133,12 +133,8 @@ def test_list_all_workspaces():
     ]
 )
 def test_delete_workspace(name):
-<<<<<<< HEAD
-    config.delete_workspace(name)
-=======
     result = config.delete_workspace(name)
     assert result['status'] == 200
->>>>>>> refactoring_cliapp
     assert name not in config.configuration['workspaces']
     settings_saved = FileHandler.read_file_contents(path_to_settings)
     assert name not in settings_saved['workspaces']
