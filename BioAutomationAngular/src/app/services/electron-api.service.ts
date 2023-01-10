@@ -72,6 +72,19 @@ export class ElectronAPIService {
     }
   }
 
+  async processPredictSNPOut(workspaceName: string, resultFile: string): Promise<boolean> {
+    try {
+      const result = await this._window?.electronAPI.processPredictSNPOut(workspaceName, resultFile)
+      if(typeof result === "undefined") {
+        return false;
+      }
+      return result
+    } catch(error: unknown) {
+      console.error(error)
+      return false;
+    }
+  }
+
   isElectron(): boolean {
     return (Object.keys(window).includes("electronAPI"))
   }

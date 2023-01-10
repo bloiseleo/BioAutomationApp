@@ -4,7 +4,7 @@ const path = require("path");
 const {exec} = require("child_process")
 const ExtraResources = require("./config/ExrtaResources.js");
 const { stderr } = require('process');
-const extraResources = new ExtraResources()
+const extraResources = new ExtraResources(false)
 
 let mainWindow
 
@@ -26,13 +26,19 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js")
+    },
+    title: "BioAutomation",
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: "#1E4C82",
+      symbolColor: "#FFFFFF"
     }
   })
 
   ipcMain.handle("get:extraResourcesPath", async () => extraResources.pathToCLIApp)
   ipcMain.handle("make:uploadDocument", async (_, data) => {
     const {pathToCLIApp} = extraResources;
-    const command = `"${pathToCLIApp}" --name="${data['workspaceName']}" --refseq="${data['refseq']}" --file="${data['file']}" --protein_sequence="${data['proteinSequence']}" --protein_header="${data['proteinHeader']}"`
+    const command = `"${pathToCLIApp}" create-workspace --name="${data['workspaceName']}" --refseq="${data['refseq']}" --file="${data['file']}" --protein_sequence="${data['proteinSequence']}" --protein_header="${data['proteinHeader']}"`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {
@@ -54,6 +60,19 @@ function createWindow () {
       return data['stdout']
     })
   })
+  ipcMain.handle("get:workspace", async (_, data) => {
+    const {workspaceName} = data;
+    const {pathToCLIApp} = extraResources;
+    const command = `"${pathToCLIApp}" get-workspace --name="${workspaceName}"`
+    return execCommand(command)
+    .then(data => {
+      if(data['stderr'] != "") {
+        console.error(stderr)
+        return false;
+      }
+      return Boolean(Number(data['stdout']))
+    })
+  })
   ipcMain.handle("processEntry:predictSNP", async (_, data) => {
     const {pathToCLIApp} = extraResources;
     const {workspaceName} = data;
@@ -67,17 +86,17 @@ function createWindow () {
       return true;
     })
   })
-  ipcMain.handle("get:workspace", async (_, data) => {
-    const {workspaceName} = data;
+  ipcMain.handle("processOut:predictSNP", async (_, data) => {
     const {pathToCLIApp} = extraResources;
-    const command = `"${pathToCLIApp}" get-workspace --name="${workspaceName}"`
+    const {workspaceName, resultFile} = data;
+    const command = `"${pathToCLIApp}" predict-snp-out --name="${workspaceName}" --result_file="${resultFile}"`;
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {
         console.error(stderr)
         return false;
       }
-      return Boolean(Number(data['stdout']))
+      return true;
     })
   })
 

@@ -1,5 +1,6 @@
 import click, json
 from src.Configuration import Configuration
+from src.outServices.PredictSNPOut import PredictSNPOut
 from src.entryServices.PredictSNPEntry import PredictSNPEntry
 
 @click.group()
@@ -49,17 +50,20 @@ def predict_snp_entry(ctx, name):
 
 @cli.command(options_metavar="--name \"workspace name\"")
 @click.option('--name', default='',metavar="<string>", help="Name of Workspace")
+@click.option('--result_file', default='', metavar="<string>", help="Path to result file")
 @click.pass_context
-def predict_snp_out(ctx, name):
-    config = ctx.obj['config']
-    workspace = config.get_workspace(name)
-    if(workspace == False):
-        print(0)
+def predict_snp_out(ctx, name, result_file):
+    config: Configuration = ctx.obj['config']
+    result = config.get_workspace(name)
+    if(result['status'] == 404):
+        click.echo(json.dumps(result))
         return
-    entry = PredictSNPEntry(workspace['path_to_base_xlsx'], workspace['protein_header'],workspace['protein_sequence'])
-    entry.getEntry(workspace['entry']['predictSNP']['path_to_file'])
-    config.service_done(name, "entry", "predictSNP")
-    print(1)
+    workspace: dict = json.loads(result['message'])
+    out = PredictSNPOut(workspace, result_file)
+    out.getOut()
+    result = config.service_done(name, "out", "predictSNP")
+    click.echo(json.dumps(result))
+    return
 
 @cli.command()
 @click.pass_context

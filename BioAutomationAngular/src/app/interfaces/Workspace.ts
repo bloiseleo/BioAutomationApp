@@ -10,6 +10,12 @@ interface Workspace {
           "path_to_file": string
       }
   },
+  "out": {
+    "predictSNP": {
+      "done": boolean,
+      "path_to_file": string
+    }
+  }
   "protein_header": string,
   "protein_sequence": string,
   [key: string]: any

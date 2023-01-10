@@ -6,6 +6,11 @@ import { PredictSNPEntryService } from 'src/app/services/predict-snpentry.servic
 import Process, { ProcessEvent } from 'src/app/interfaces/Process';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
+import { PredictSNPOutServiceService } from 'src/app/services/predict-snpout-service.service';
+
+function identify<T>(value: any): T {
+  return value as T;
+}
 
 @Component({
   selector: 'app-workspace',
@@ -17,6 +22,7 @@ export class WorkspaceComponent implements OnInit {
   workspaces: Workspaces = {}
   workspacesNames: string[] = []
   entryServices: Array<Process> = []
+  outServices: Array<Process> = []
   showEntry: boolean = true;
   showOut: boolean = false;
   workspaceNameSelected?: string;
@@ -26,12 +32,20 @@ export class WorkspaceComponent implements OnInit {
     private alertService: AlertService,
     private loadingService: LoadingService,
     private electronService: ElectronAPIService,
-    public predictSNPEntry: PredictSNPEntryService) {
+    public predictSNPEntry: PredictSNPEntryService,
+    public predictSNPOut: PredictSNPOutServiceService) {
       this.entryServices.push({
         name: "Predict SNP",
         key: "predictSNP",
         description: "Gera a entrada necessária para utilizar o Predict SNP de acordo com o site: https://loschmidt.chemi.muni.cz/predictsnp1/",
         kind: "entry",
+        done: false
+      })
+      this.outServices.push({
+        name: "Predict SNP",
+        key: "predictSNP",
+        description: "Gera a saída necessária para utilizar o Predict SNP de acordo com o site: https://loschmidt.chemi.muni.cz/predictsnp1/",
+        kind: "out",
         done: false
       })
   }
@@ -40,6 +54,9 @@ export class WorkspaceComponent implements OnInit {
     return {
       "entry": {
         "predictSNP": (workspace: Workspace) => this.predictSNPEntry.process(workspace.name)
+      },
+      "out": {
+        "predictSNP": (workspace: Workspace, resultFile: File) => this.predictSNPOut.process(workspace, resultFile)
       }
     }
   }
@@ -59,7 +76,7 @@ export class WorkspaceComponent implements OnInit {
     })
   }
 
-  handleExecute($event: ProcessEvent ) {
+  handleExecute($event: ProcessEvent) {
     if(this.workspaceNameSelected === undefined) {
       this.setErrorMessage("Um workspace deve ser escolhido antes de executar as funções existentes.")
       throw new Error("Workspace must be selected to execute functions")
@@ -68,32 +85,15 @@ export class WorkspaceComponent implements OnInit {
       this.setErrorMessage("Um workspace deve ser escolhido antes de executar as funções existentes.")
       throw new Error("Workspace must be selected to execute functions")
     }
-    const workspaceName = this.workspaceNameSelected as string;
-    const workspace = this.workspaceSelected as Workspace;
-    const {key, kind, serviceName} = $event
-    const options = this.executeOptions;
-    const optionsWanted = options[kind];
-    if(!Object.keys(optionsWanted).includes(key)) {
-      throw new Error(`Kind => ${kind} does not have the service ${key}`)
+
+    const {key, kind, serviceName, resultFile} = $event
+
+    if(kind == "entry") {
+      return this.executeEntry(kind, key, serviceName)
+    } else {
+      return this.executeOut(kind, key, identify(resultFile), serviceName);
     }
-    const serviceToExecute = optionsWanted[key];
-    const timestart = Date.now();
-    const icons = document.querySelectorAll(".process__main--icon") as NodeListOf<HTMLElement>;
-    this.loadingService.startLoading(icons)
-    serviceToExecute(workspace)
-    .then((success: boolean) => {
-      if(!success) {
-        this.setErrorMessage("Houve um erro interno ao processar esse serviço.")
-        console.error("There was an error while processing this service: ", kind, key, serviceName)
-        return;
-      }
-      const timeEnd = Date.now();
-      const timeSpent = (timeEnd - timestart)/1000;
-      const message = this.createMessageDone(serviceName, timeSpent)
-      this.atualizeWorkspaceServiceState(workspaceName, kind, key)
-      this.alertService.show(message.title, message.message)
-      this.loadingService.stopLoading()
-    })
+
   }
 
   handleDownload($event: ProcessEvent) {
@@ -106,9 +106,9 @@ export class WorkspaceComponent implements OnInit {
       throw new Error("Workspace must be selected to execute functions")
     }
     const workspace = this.workspaceSelected as Workspace;
-    const {key, kind} = $event
+    const {key, kind, serviceName} = $event
     const pathToFile = workspace[kind][key]['path_to_file'] as string;
-    this.downloadFile(pathToFile)
+    this.downloadFile(pathToFile, `${serviceName}_${kind}`)
   }
 
   handleWorkspaceChanged() {
@@ -148,11 +148,68 @@ export class WorkspaceComponent implements OnInit {
 
   }
 
-  private downloadFile(path: string) {
+  private downloadFile(path: string, filename: string) {
     const link = document.createElement('a');
-    link.setAttribute("download", "predictSNP_entryFile");
+    link.setAttribute("download", filename);
     link.setAttribute('href', path);
     link.click()
+  }
+
+  private executeEntry(kind: string, key: string, serviceName: string) {
+    const options = this.executeOptions;
+    const optionsWanted = options[kind];
+    const workspaceName = this.workspaceNameSelected as string;
+    const workspace = this.workspaceSelected as Workspace;
+    if(!Object.keys(optionsWanted).includes(key)) {
+      throw new Error(`Kind => ${kind} does not have the service ${key}`)
+    }
+    const serviceToExecute = optionsWanted[key];
+    const timestart = Date.now();
+    const icons = document.querySelectorAll(".process__main--icon") as NodeListOf<HTMLElement>;
+    this.loadingService.startLoading(icons)
+    serviceToExecute(workspace)
+    .then((success: boolean) => {
+      if(!success) {
+        this.setErrorMessage("Houve um erro interno ao processar esse serviço.")
+        console.error("There was an error while processing this service: ", kind, key, serviceName)
+        return;
+      }
+      const timeEnd = Date.now();
+      const timeSpent = (timeEnd - timestart)/1000;
+      const message = this.createMessageDone(serviceName, timeSpent)
+      this.atualizeWorkspaceServiceState(workspaceName, kind, key)
+      this.alertService.show(message.title, message.message)
+      this.loadingService.stopLoading()
+    })
+  }
+
+  private executeOut(kind: string, key: string, resultFile: File, serviceName: string) {
+    const options = this.executeOptions;
+    const optionsWanted = options[kind];
+    const workspaceName = this.workspaceNameSelected as string;
+    const workspace = this.workspaceSelected as Workspace;
+    if(!Object.keys(optionsWanted).includes(key)) {
+      throw new Error(`Kind => ${kind} does not have the service ${key}`)
+    }
+    const serviceToExecute = optionsWanted[key];
+    const timestart = Date.now();
+    const icons = document.querySelectorAll(".process__main--icon") as NodeListOf<HTMLElement>;
+    this.loadingService.startLoading(icons)
+    serviceToExecute(workspace, resultFile)
+    .then((success: boolean) => {
+      if(!success) {
+        this.setErrorMessage("Houve um erro interno ao processar esse serviço.")
+        console.error("There was an error while processing this service: ", kind, key, serviceName)
+        return;
+      }
+      const timeEnd = Date.now();
+      const timeSpent = (timeEnd - timestart)/1000;
+      const message = this.createMessageDone(serviceName, timeSpent)
+      this.atualizeWorkspaceServiceState(workspaceName, kind, key)
+      this.alertService.show(message.title, message.message)
+      this.loadingService.stopLoading()
+    })
+
   }
 
   private setErrorMessage(mensagem: string) {
@@ -186,6 +243,12 @@ export class WorkspaceComponent implements OnInit {
       const cloneEntry = {...entry}
       cloneEntry.done = workspaceSelected[entry.kind][entry.key]['done']
       return cloneEntry;
+    })
+    this.outServices = this.outServices.map(out => {
+      const workspaceSelected = this.workspaceSelected as Workspace;
+      const cloneOut = {...out}
+      cloneOut.done = workspaceSelected[out.kind][out.key]['done']
+      return cloneOut;
     })
   }
 

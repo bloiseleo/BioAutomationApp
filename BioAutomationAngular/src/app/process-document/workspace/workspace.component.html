@@ -26,13 +26,21 @@
         <app-process *ngFor="let entryService of entryServices"
           [name]="entryService.name"
           [description]="entryService.description"
-          [kind]="entryService.kind" [key]="entryService.key"
+          [kind]="entryService.kind"
+          [key]="entryService.key"
           [processDone]="entryService.done"
           (onExecute)="handleExecute($event)"
           (onDownload)="handleDownload($event)"></app-process>
       </section>
       <section *ngIf="showOut" class="workspace__main__services">
-        Mostra Saída
+        <app-process *ngFor="let outService of outServices"
+          [name]="outService.name"
+          [description]="outService.description"
+          [kind]="outService.kind"
+          [key]="outService.key"
+          [processDone]="outService.done"
+          (onExecute)="handleExecute($event)"
+          (onDownload)="handleDownload($event)"></app-process>
       </section>
     </div>
   </main>

@@ -13,6 +13,8 @@ module.exports = {
         name: 'BioAutomation',
         manufacturer: "BioInfoGroup",
         version: "1.0.0",
+        exe: "BioAutomation",
+        shortcutFolderName: "BioAutomation"
       }
     }
   ],
