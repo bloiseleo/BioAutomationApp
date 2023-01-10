@@ -1,8 +1,8 @@
-const path = require("path")
+const {pathToIcon, cliapp} = require('../Constants.js')
 
 module.exports = {
   packagerConfig: {
-    extraResource: path.join(__dirname, "..", "BioAutomationCLI_v2", "dist", "main")
+    extraResource: cliapp
   },
   rebuildConfig: {},
   makers: [
@@ -14,7 +14,8 @@ module.exports = {
         manufacturer: "BioInfoGroup",
         version: "1.0.0",
         exe: "BioAutomation",
-        shortcutFolderName: "BioAutomation"
+        shortcutFolderName: "BioAutomation",
+        icon: pathToIcon
       }
     }
   ],

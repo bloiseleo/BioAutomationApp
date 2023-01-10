@@ -1,4 +1,5 @@
 const path = require("path")
+const {cliapp} = require('../../Constants.js')
 
 class ExtraResources {
 
@@ -16,7 +17,7 @@ class ExtraResources {
    */
   get pathToCLIApp() {
     if(this.dev) {
-      return path.join(__dirname, "..", "..", "BioAutomationCLI_v2", "dist", "main", "main.exe")
+      return path.join(cliapp, "main.exe");
     }
     return path.join(process.resourcesPath, "main", "main.exe")
   }

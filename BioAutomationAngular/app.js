@@ -4,6 +4,7 @@ const path = require("path");
 const {exec} = require("child_process")
 const ExtraResources = require("./config/ExrtaResources.js");
 const { stderr } = require('process');
+const { pathToIcon } = require('../Constants.js');
 const extraResources = new ExtraResources(false)
 
 let mainWindow
@@ -23,6 +24,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
+    icon: pathToIcon,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js")
