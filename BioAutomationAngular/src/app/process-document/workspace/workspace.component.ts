@@ -44,7 +44,7 @@ export class WorkspaceComponent implements OnInit {
       this.outServices.push({
         name: "Predict SNP",
         key: "predictSNP",
-        description: "Gera a saída necessária para utilizar o Predict SNP de acordo com o site: https://loschmidt.chemi.muni.cz/predictsnp1/",
+        description: "Gera a saída necessária para utilizar os resultados do Predict SNP.",
         kind: "out",
         done: false
       })
