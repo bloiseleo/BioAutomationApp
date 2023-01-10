@@ -1,6 +1,9 @@
-# BioAutomation
+<center>
+    <img src="./shark.ico" />
+    <h1 style="font-size:32px;font-weight: bold;"> BioAutomation  </h1>
+</center>
 
-O <b><i>BioAutomation</i></b> é um conjunto de softwares voltados para facilitar a análise de resultados provenientes de diversos algoritmos.<br> 
+O <b><i>BioAutomation</i></b> é um conjunto de softwares voltados para facilitar a análise de resultados provenientes de diversos algoritmos.<br><br>
 Quando vamos realizar uma análise <b><i>in-silico</b></i> de uma determinada mutação <i>missense</i> com um determinado grupo de algoritmos, utilizamos uma série de <i>inputs</i> para cada tipo de algoritmo. Cada algoritmo possui seu próprio <i>input</i> em seus respectivos formatos. Quando temos o resultado, cada algoritmo tem um <i>output</i> com os seus respectivos formatos. <b>O objetivo do BioAutomation é facilitar a formação, gerenciamento e análise desses arquivos.</b>
 
 
