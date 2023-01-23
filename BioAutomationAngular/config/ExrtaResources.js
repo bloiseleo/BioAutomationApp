@@ -1,5 +1,5 @@
 const path = require("path")
-const {cliapp} = require('../../Constants.js')
+const cliapp = path.resolve(__dirname,"..","..","BioAutomationCLI_v2", "dist", "main")
 
 class ExtraResources {
 

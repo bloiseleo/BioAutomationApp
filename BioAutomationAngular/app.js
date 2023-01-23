@@ -4,8 +4,8 @@ const path = require("path");
 const {exec} = require("child_process")
 const ExtraResources = require("./config/ExrtaResources.js");
 const { stderr } = require('process');
-const { pathToIcon } = require('../Constants.js');
 const extraResources = new ExtraResources(false)
+const pathToIcon = path.resolve(__dirname, "..", "shark.ico")
 
 let mainWindow
 

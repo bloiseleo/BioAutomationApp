@@ -1,4 +1,7 @@
-const {pathToIcon, cliapp} = require('../Constants.js')
+
+const path = require('path')
+const cliapp = path.resolve(__dirname,"..","BioAutomationCLI_v2", "dist", "main")
+const pathToIcon = path.resolve(__dirname, "..", "shark.ico")
 
 module.exports = {
   packagerConfig: {
