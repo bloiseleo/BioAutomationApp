@@ -56,7 +56,7 @@ export class WorkspaceComponent implements OnInit {
         "predictSNP": (workspace: Workspace) => this.predictSNPEntry.process(workspace.name)
       },
       "out": {
-        "predictSNP": (workspace: Workspace, resultFile: File) => this.predictSNPOut.process(workspace, resultFile)
+        "predictSNP": (workspace: Workspace, resultFile: File | File[]) => this.predictSNPOut.process(workspace, resultFile)
       }
     }
   }
