@@ -48,12 +48,20 @@ class Configuration:
                 "predictSNP": {
                     "done": False,
                     "path_to_file": os.path.join(path_to_workspace, "predict_snp_entry.txt")
+                },
+                "snpsGO": {
+                    "done": False,
+                    "path_to_file": os.path.join(path_to_workspace, "snpggo_entry.txt")
                 }
             },
             "out": {
                 "predictSNP": {
                     "done": False,
                     "path_to_file": os.path.join(path_to_workspace, "predict_snp_out.xlsx")
+                },
+                "snpsGO": {
+                    "done": False,
+                    "path_to_file": os.path.join(path_to_workspace, "snpggo_out.xlsx")
                 }
             },
             "protein_header": protein_header,
