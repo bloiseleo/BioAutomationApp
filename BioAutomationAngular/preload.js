@@ -9,5 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   workspaceExists: (workspaceName) => ipcRenderer.invoke("get:workspace", {workspaceName}),
   processPredictSNPOut: (workspaceName, resultFile) => ipcRenderer.invoke("processOut:predictSNP", {
     workspaceName, resultFile
-  })
+  }),
+  processSnpsGoEntry: (workspaceName) => ipcRenderer.invoke("processEntry:snpsGO", {workspaceName}),
+  
 })

@@ -4,7 +4,7 @@ const path = require("path");
 const {exec} = require("child_process")
 const ExtraResources = require("./config/ExrtaResources.js");
 const { stderr } = require('process');
-const extraResources = new ExtraResources(false)
+const extraResources = new ExtraResources(true)
 const pathToIcon = path.resolve(__dirname, "..", "shark.ico")
 
 let mainWindow
@@ -92,6 +92,20 @@ function createWindow () {
     const {pathToCLIApp} = extraResources;
     const {workspaceName, resultFile} = data;
     const command = `"${pathToCLIApp}" predict-snp-out --name="${workspaceName}" --result_file="${resultFile}"`;
+    return execCommand(command)
+    .then(data => {
+      if(data['stderr'] != "") {
+        console.error(stderr)
+        return false;
+      }
+      return true;
+    })
+  })
+
+  ipcMain.handle("processEntry:snpsGO", async (_, data) => {
+    const {pathToCLIApp} = extraResources;
+    const {workspaceName} = data;
+    const command = `"${pathToCLIApp}" snpsgo-entry --name="${workspaceName}"`
     return execCommand(command)
     .then(data => {
       if(data['stderr'] != "") {

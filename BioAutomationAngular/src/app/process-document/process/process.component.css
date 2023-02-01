@@ -1,3 +1,6 @@
+:host {
+  margin: 1rem;
+}
 .process {
   background-color: var(--dark_blue);
   border-radius: 10px;

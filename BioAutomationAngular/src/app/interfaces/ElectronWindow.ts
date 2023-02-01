@@ -10,5 +10,6 @@ export interface ElectronWindow extends Window {
     processPredictSNPEntry: (workspaceName: string) => Promise<boolean>,
     workspaceExists: (workspaceName: string) => Promise<boolean>,
     processPredictSNPOut: (workspaceName: string, resultFile: string) => Promise<boolean>
+    processSnpsGoEntry:(workspaceName: string) => Promise<boolean>
   }
 }

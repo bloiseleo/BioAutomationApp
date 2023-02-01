@@ -85,6 +85,19 @@ export class ElectronAPIService {
     }
   }
 
+  async processSnpsGoEntry(workspaceName: string): Promise<boolean> {
+    try {
+      const result = await this._window?.electronAPI.processSnpsGoEntry(workspaceName)
+      if(typeof result === "undefined") {
+        return false;
+      }
+      return result
+    } catch(error: unknown) {
+      console.error(error)
+      return false;
+    }
+  }
+
   isElectron(): boolean {
     return (Object.keys(window).includes("electronAPI"))
   }

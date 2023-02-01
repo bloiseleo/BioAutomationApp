@@ -4,6 +4,10 @@
   height: 100%;
 }
 
+html {
+  overflow-y: auto;
+}
+
 .sideheader {
   height: 100%;
   width: 9%;

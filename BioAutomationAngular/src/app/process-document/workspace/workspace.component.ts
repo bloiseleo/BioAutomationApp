@@ -7,6 +7,7 @@ import Process, { ProcessEvent } from 'src/app/interfaces/Process';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { PredictSNPOutServiceService } from 'src/app/services/predict-snpout-service.service';
+import { SnpsGOEntryService } from 'src/app/services/snps-goentry.service';
 
 function identify<T>(value: any): T {
   return value as T;
@@ -21,8 +22,27 @@ export class WorkspaceComponent implements OnInit {
 
   workspaces: Workspaces = {}
   workspacesNames: string[] = []
-  entryServices: Array<Process> = []
-  outServices: Array<Process> = []
+  entryServices: Array<Process> = [{
+    name: "Predict SNP",
+    key: "predictSNP",
+    description: "Gera a entrada necessária para utilizar o Predict SNP de acordo com o site: https://loschmidt.chemi.muni.cz/predictsnp1/",
+    kind: "entry",
+    done: false
+  },
+  {
+    name: "SNPS GO",
+    key: "snpsGO",
+    description: "Gera a entrada necessária para utilizar o SNPS GO de acordo com o site: https://snps.biofold.org/snps-and-go/snps-and-go.html",
+    kind: "entry",
+    done: false
+  }];
+  outServices: Array<Process> = [{
+    name: "Predict SNP",
+    key: "predictSNP",
+    description: "Gera a saída necessária para utilizar os resultados do Predict SNP.",
+    kind: "out",
+    done: false
+  }]
   showEntry: boolean = true;
   showOut: boolean = false;
   workspaceNameSelected?: string;
@@ -33,27 +53,14 @@ export class WorkspaceComponent implements OnInit {
     private loadingService: LoadingService,
     private electronService: ElectronAPIService,
     public predictSNPEntry: PredictSNPEntryService,
-    public predictSNPOut: PredictSNPOutServiceService) {
-      this.entryServices.push({
-        name: "Predict SNP",
-        key: "predictSNP",
-        description: "Gera a entrada necessária para utilizar o Predict SNP de acordo com o site: https://loschmidt.chemi.muni.cz/predictsnp1/",
-        kind: "entry",
-        done: false
-      })
-      this.outServices.push({
-        name: "Predict SNP",
-        key: "predictSNP",
-        description: "Gera a saída necessária para utilizar os resultados do Predict SNP.",
-        kind: "out",
-        done: false
-      })
-  }
+    public predictSNPOut: PredictSNPOutServiceService,
+    public snpsGOEntry: SnpsGOEntryService) {}
 
   get executeOptions(): ProcessAPI {
     return {
       "entry": {
-        "predictSNP": (workspace: Workspace) => this.predictSNPEntry.process(workspace.name)
+        "predictSNP": (workspace: Workspace) => this.predictSNPEntry.process(workspace.name),
+        "snpsGO": (workspace: Workspace) => this.snpsGOEntry.process(workspace.name)
       },
       "out": {
         "predictSNP": (workspace: Workspace, resultFile: File | File[]) => this.predictSNPOut.process(workspace, resultFile)
@@ -113,7 +120,6 @@ export class WorkspaceComponent implements OnInit {
 
   handleWorkspaceChanged() {
     const workspace = this.workspaces[this.workspaceNameSelected as string];
-
     if(typeof workspace === "undefined") {
       throw new Error("Workpsace selected is not valid")
     }
