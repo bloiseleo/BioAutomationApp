@@ -3,6 +3,7 @@ from src.Configuration import Configuration
 from src.outServices.PredictSNPOut import PredictSNPOut
 from src.entryServices.PredictSNPEntry import PredictSNPEntry
 from src.helpers.FileHandler import FileHandler
+from json import loads
 path_to_tempfolder = os.path.join(tempfile.gettempdir(), "bioautomation")
 shutil.rmtree(path_to_tempfolder)
 config = Configuration()
@@ -22,9 +23,12 @@ def create_workspace(config: Configuration):
         "MSEYIRVTEDENDEPIEIPSEDDGTVLLSTVTAQFPGACGLRYRNPVSQCMRGVRLVEGILHAPDAGWGNLVYVVNYPKDNKRKMDETDASSAVKVKRAVQKTSDLIVLGLPWKTTEQDLKEYFSTFGEVLMVQVKKDLKTGHSKGFGFVRFTEYETQVKVMSQRHMIDGRWCDCKLPNSKQSQDEPLRSRKVFVGRCTEDMTEDELREFFSQYGDVMDVFIPKPFRAFAFVTFADDQIAQSLCGEDLIIKGISVHISNAEPKHNSNRQLERSGRFGGNPGGFGNQGGFGNSRGGGAGLGNNQGSNMGGGMNFGAFSINPAMMAAAQAALQSSWGMMGMLASQQNQSGPSGNNQNQGNMQREPNQAFGSGNNSYSGSNSGAAIGWGSASNAGSGSGFNGGFGSSMDSKSSGWGM")
 def generate_entry_to_predict_snp(workspace_name: str):
     workspace = config.get_workspace("TDP43")
+    if(workspace['status'] != 200):
+        raise Exception("Erro ao Criar Workspace")
+    workspace = loads(workspace['message'])
     service = PredictSNPEntry(dataframe_path=workspace['path_to_base_xlsx'],
-        protein_header=workspace['protein_header'],
-        protein_seqence=workspace['protein_sequence'])
+    protein_header=workspace['protein_header'],
+    protein_seqence=workspace['protein_sequence'])
     service.getEntry(workspace['entry']['predictSNP']['path_to_file'])
     config.service_done(workspace_name, "entry", "predictSNP")
 
@@ -41,6 +45,7 @@ def test_predictsnp_out(result_file: str):
     generate_entry_to_predict_snp("TDP43")
     if(workspace == False):
         raise Exception("Workspace não foi selecionado")
+    workspace = loads(workspace['message'])
     service = PredictSNPOut(workspace, result_file)
     service.getOut()
     assert FileHandler.file_exists(workspace['out']['predictSNP']['path_to_file']) == True

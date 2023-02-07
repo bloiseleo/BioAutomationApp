@@ -1,3 +1,7 @@
 # BioAutomation CLI
 
-Application responsable for processing big volumes of biological mutations from dbSNP.
+Aplicação responsável por processar grandes volumes de dados biológicos derivados do dbSNP no formato XML.
+
+
+## Como criar novos Serviço de Entrada
+

@@ -4,10 +4,12 @@ from src.helpers.FileHandler import FileHandler
 from src.erros.WorkspaceAlreadyExistsException import WorkspaceAlreadyExistsException
 import pytest
 import pandas as pd
+import os
 
 path_to_tempfolder = os.path.join(tempfile.gettempdir(), "bioautomation")
 
-shutil.rmtree(path_to_tempfolder)
+if(os.path.exists(path_to_tempfolder)):
+    shutil.rmtree(path_to_tempfolder)
 
 config = Configuration()
 

@@ -88,7 +88,7 @@ class Configuration:
         
         name = StringDoctor.treat_workspace_name(name)
         
-        if(self.check_if_workspace_exist(name)):
+        if self.check_if_workspace_exist(name):
             return self._message(401, f"O workspace que você está tentando criar já existe")
         
         workspace_settings = self.create_settings_to_workspace(name, protein_header, protein_sequence)
